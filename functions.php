@@ -1,5 +1,8 @@
 <?php
 
+// Include the WSU Timeline plugin, which controls some timeline functionality.
+include_once( __DIR__ . '/includes/wsu-timeline.php' );
+
 class WSU_Timeline_Theme {
 	/**
 	 * Setup hooks for the theme.

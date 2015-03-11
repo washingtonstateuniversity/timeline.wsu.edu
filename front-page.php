@@ -7,6 +7,41 @@ get_header();
 	<div class="column one">Timeline.</div>
 </section>
 
-
 <?php
+
+$timeline_query = wsu_timeline_get_items();
+
+$flip_flop = 0;
+while( $timeline_query->have_posts() ) {
+	$timeline_query->the_post();
+
+	if ( 0 === $flip_flop ) {
+		$column_class = 'one';
+		echo '<section class="row halves">';
+	} else {
+		$column_class = 'two';
+	}
+
+	$timeline_sub_headline = get_post_meta( get_the_ID(), '_wsu_tp_sub_headline', true );
+	?>
+	<div class="column <?php echo $column_class; ?>">
+		<header>
+			<h2><?php the_title(); ?></h2>
+			<?php if ( ! empty( $timeline_sub_headline ) ) : ?><h3><?php echo $timeline_sub_headline; ?></h3><?php endif; ?>
+		</header>
+		<div class="timeline-content timeline-content-<?php echo $column_class; ?>">
+			<?php the_content(); ?>
+		</div>
+	</div>
+	<?php
+
+	if ( 0 === $flip_flop ) {
+		$flip_flop++;
+	} else {
+		$flip_flop = 0;
+		echo '</section>';
+	}
+}
+
+
 get_footer();

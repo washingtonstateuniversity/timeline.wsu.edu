@@ -22,14 +22,16 @@ while( $timeline_query->have_posts() ) {
 	$start_date = get_post_meta( $post->ID, '_wsu_tp_start_date', true );
 	$end_date = get_post_meta( $post->ID, '_wsu_tp_end_date', true );
 	$external_url = get_post_meta( $post->ID, '_wsu_tp_external_url', true );
+
+	$item_has_featured_image = spine_has_featured_image();
 	?>
-	<div class="column <?php echo $column_class; ?> timeline-item-container">
+	<div class="column <?php echo $column_class; ?> timeline-item-container <?php if ( $item_has_featured_image ) : echo 'item-has-featured-image'; endif; ?>">
 		<header>
 			<h2><?php the_title(); ?></h2>
 			<?php if ( ! empty( $timeline_sub_headline ) ) : ?><h3><?php echo $timeline_sub_headline; ?></h3><?php endif; ?>
 		</header>
 		<?php
-		if ( spine_has_featured_image() ) {
+		if ( $item_has_featured_image ) {
 			echo '<figure class="timeline-featured-image"><img src="' . esc_url( spine_get_featured_image_src( 'spine-small_size' ) ) . '"></figure>';
 		}
 		?>

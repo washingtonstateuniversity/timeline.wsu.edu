@@ -39,7 +39,14 @@ while( $timeline_query->have_posts() ) {
 		<?php if ( ! empty( $end_date ) ) : ?><span class="end-date"><?php echo esc_html( $end_date ); ?></span><?php endif; ?>
 		<?php if ( ! empty( $external_url ) ) : ?><span class="external-url"><a href="<?php echo esc_url( $external_url ); ?>"><?php echo esc_url( $external_url ); ?></a></span><?php endif; ?>
 		<div class="timeline-content timeline-content-<?php echo $column_class; ?>">
-			<?php the_content(); ?>
+			<?php
+			$content = apply_filters( 'the_content', get_the_content() );
+			$content = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $content );
+			$content = strip_tags( $content, '<p><a><span><div><strong><em><b><i><sup><sub><ul><li><h1><h2><h3><h4><h5><h6>' );
+			$content = str_replace( '<p>&nbsp;</p>', '', $content );
+			$content = str_replace( '<p></p>', '', $content );
+			echo $content;
+			?>
 		</div>
 	</div>
 	<?php

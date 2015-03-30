@@ -2,11 +2,8 @@
 
 get_header();
 ?>
-
-<section class="row single gutter pad-ends">
-	<div class="column one">Our Timeline.</div>
-</section>
-
+<main>
+	<section class="single row">
 <?php
 
 $timeline_query = wsu_timeline_get_items();
@@ -52,5 +49,8 @@ while( $timeline_query->have_posts() ) {
 	}
 }
 
-
+?>
+	</section>
+</main>
+<?php
 get_footer();

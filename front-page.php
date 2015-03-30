@@ -3,7 +3,7 @@
 get_header();
 ?>
 <main>
-	<section class="single row">
+	<section class="halves row">
 <?php
 
 $timeline_query = wsu_timeline_get_items();

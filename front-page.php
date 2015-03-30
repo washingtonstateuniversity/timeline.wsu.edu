@@ -17,7 +17,6 @@ while( $timeline_query->have_posts() ) {
 
 	if ( 0 === $flip_flop ) {
 		$column_class = 'one';
-		echo '<section class="row halves">';
 	} else {
 		$column_class = 'two';
 	}
@@ -50,7 +49,6 @@ while( $timeline_query->have_posts() ) {
 		$flip_flop++;
 	} else {
 		$flip_flop = 0;
-		echo '</section>';
 	}
 }
 

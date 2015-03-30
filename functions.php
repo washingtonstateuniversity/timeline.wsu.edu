@@ -9,6 +9,7 @@ class WSU_Timeline_Theme {
 	 */
 	public function __construct() {
 		add_action( 'spine_enqueue_styles', array( $this, 'enqueue_styles' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 	}
 
 	public function get_timeline_items() {
@@ -28,6 +29,11 @@ class WSU_Timeline_Theme {
 		wp_dequeue_style( 'spine-theme-child' );
 		wp_enqueue_style( 'wsu-home-style', 'https://wsu.edu/wp-content/themes/wsu-home/style.css', array(), spine_get_script_version() );
 		wp_enqueue_style( 'spine-theme-child' );
+	}
+
+	public function enqueue_scripts() {
+		wp_enqueue_script( 'wsu-home-typekit', 'https://use.typekit.net/roi0hte.js', array(), false, false );
+		wp_enqueue_script( 'wsu-timeline', get_stylesheet_directory_uri() . '/js/timeline.js', array( 'jquery' ), spine_get_script_version(), true );
 	}
 }
 $wsu_timeline_theme = new WSU_Timeline_Theme();

@@ -127,6 +127,9 @@ class WSU_Timeline {
 		$video_url = get_post_meta( $post->ID, '_wsu_tp_video_url', true );
 		$submitter_source = get_post_meta( $post->ID, '_wsu_tp_story_source', true );
 
+		$start_date = $this->string_date_to_slash( $start_date );
+		$end_date = $this->string_date_to_slash( $end_date );
+
 		wp_nonce_field( 'wsu-timeline-save-point', '_wsu_timeline_point_nonce' );
 		?>
 		<div class="capture-point-data">
@@ -200,10 +203,30 @@ class WSU_Timeline {
 	}
 
 	/**
+	 * Turn a string of YYYYMMDD and turn it into a date string separated
+	 * by "/" for input and readability in the admin.
+	 *
+	 * @param string $date
+	 *
+	 * @return bool|string
+	 */
+	public function string_date_to_slash( $date ) {
+		if ( 8 !== strlen( $date ) ) {
+			return false;
+		}
+
+		$year = substr( $date, 0, 4 );
+		$month = substr( $date, 4, 2 );
+		$day = substr( $date, 6, 2 );
+
+		return $month . '/' . $day . '/' . $year;
+	}
+
+	/**
 	 * Take a date string separated by "/" and turn it into a string of
 	 * YYYYMMDD for better sorting in the database and on output.
 	 *
-	 * @param $date
+	 * @param string $date
 	 *
 	 * @return bool|string
 	 */
@@ -362,12 +385,22 @@ class WSU_Timeline {
 	public function manage_item_posts_custom_column( $column_name, $post_id ) {
 		if ( 'start_date' === $column_name ) {
 			$start_date = get_post_meta( $post_id, '_wsu_tp_start_date', true );
-			echo esc_html( $start_date );
+			$date = $this->string_date_to_slash( $start_date );
+			if ( $date ) {
+				echo $date;
+			} else {
+				echo esc_html( $start_date );
+			}
 		}
 
 		if ( 'end_date' === $column_name ) {
 			$end_date = get_post_meta( $post_id, '_wsu_tp_end_date', true );
-			echo esc_html( $end_date );
+			$date = $this->string_date_to_slash( $end_date );
+			if ( $date ) {
+				echo $date;
+			} else {
+				echo esc_html( $end_date );
+			}
 		}
 	}
 

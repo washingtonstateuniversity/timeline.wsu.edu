@@ -215,11 +215,9 @@ class WSU_Timeline {
 			return false;
 		}
 
-		$year = substr( $date, 0, 4 );
-		$month = substr( $date, 4, 2 );
-		$day = substr( $date, 6, 2 );
+		$date = DateTime::createFromFormat( 'Ymd', $date );
 
-		return $month . '/' . $day . '/' . $year;
+		return $date->format( 'm/d/Y' );
 	}
 
 	/**
@@ -231,40 +229,13 @@ class WSU_Timeline {
 	 * @return bool|string
 	 */
 	public function slash_date_to_string( $date ) {
-		$date = explode( '/', $date );
-
-		if ( 3 !== count( $date ) ) {
+		if ( 10 !== strlen( $date ) ) {
 			return false;
 		}
 
-		if ( isset( $date[0] ) ) {
-			$month = absint( $date[0] );
-			if ( 10 > $month ) {
-				$month = '0' . $month;
-			}
-		} else {
-			return false;
-		}
+		$date = DateTime::createFromFormat( 'm/d/Y', $date );
 
-		if ( isset( $date[1] ) ) {
-			$day = absint( $date[1] );
-			if ( 10 > $day ) {
-				$day = '0' . $day;
-			}
-		} else {
-			return false;
-		}
-
-		if ( isset( $date[2] ) ) {
-			$year = absint( $date[2] );
-			if ( $year < 1000 || $year > 9999 ) {
-				$year = '';
-			}
-		} else {
-			return false;
-		}
-
-		return $year . $month . $day;
+		return $date->format( 'Ymd' );
 	}
 
 	/**

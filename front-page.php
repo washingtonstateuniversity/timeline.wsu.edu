@@ -23,6 +23,16 @@ while( $timeline_query->have_posts() ) {
 	$end_date = get_post_meta( $post->ID, '_wsu_tp_end_date', true );
 	$external_url = get_post_meta( $post->ID, '_wsu_tp_external_url', true );
 
+	if ( $start_date && 8 === strlen( $start_date ) ) {
+		$start_date = DateTime::createFromFormat( 'Ymd', $start_date );
+		$start_date = $start_date->format( 'j F Y' );
+	}
+
+	if ( $end_date && 8 === strlen( $end_date ) ) {
+		$end_date = DateTime::createFromFormat( 'Ymd', $end_date );
+		$end_date = $end_date->format( 'j F Y' );
+	}
+
 	$item_has_featured_image = spine_has_featured_image();
 	?>
 	<div class="column <?php echo $column_class; ?> timeline-item-container <?php if ( $item_has_featured_image ) : echo 'item-has-featured-image'; endif; ?>">

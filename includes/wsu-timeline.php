@@ -198,6 +198,52 @@ class WSU_Timeline {
 		</div>
 	<?php
 	}
+
+	/**
+	 * Take a date string separated by "/" and turn it into a string of
+	 * YYYYMMDD for better sorting in the database and on output.
+	 *
+	 * @param $date
+	 *
+	 * @return bool|string
+	 */
+	public function slash_date_to_string( $date ) {
+		$date = explode( '/', $date );
+
+		if ( 3 !== count( $date ) ) {
+			return false;
+		}
+
+		if ( isset( $date[0] ) ) {
+			$month = absint( $date[0] );
+			if ( 10 > $month ) {
+				$month = '0' . $month;
+			}
+		} else {
+			return false;
+		}
+
+		if ( isset( $date[1] ) ) {
+			$day = absint( $date[1] );
+			if ( 10 > $day ) {
+				$day = '0' . $day;
+			}
+		} else {
+			return false;
+		}
+
+		if ( isset( $date[2] ) ) {
+			$year = absint( $date[2] );
+			if ( $year < 1000 || $year > 9999 ) {
+				$year = '';
+			}
+		} else {
+			return false;
+		}
+
+		return $year . $month . $day;
+	}
+
 	/**
 	 * Save all of the meta data associated with a timeline point when saved.
 	 *
@@ -228,13 +274,21 @@ class WSU_Timeline {
 		}
 
 		if ( isset( $_POST['wsu_tp_start_date'] ) && ! empty( trim( $_POST['wsu_tp_start_date'] ) ) ) {
-			update_post_meta( $post_id, '_wsu_tp_start_date', sanitize_text_field( $_POST['wsu_tp_start_date'] ) );
+			$start_date = $this->slash_date_to_string( $_POST['wsu_tp_start_date'] );
+
+			if ( $start_date ) {
+				update_post_meta( $post_id, '_wsu_tp_start_date', $start_date );
+			}
 		} else {
 			delete_post_meta( $post_id, '_wsu_tp_start_date' );
 		}
 
 		if ( isset( $_POST['wsu_tp_end_date'] ) && ! empty( trim( $_POST['wsu_tp_end_date'] ) ) ) {
-			update_post_meta( $post_id, '_wsu_tp_end_date', sanitize_text_field( $_POST['wsu_tp_end_date'] ) );
+			$end_date = $this->slash_date_to_string( $_POST['wsu_tp_end_date'] );
+
+			if ( $end_date ) {
+				update_post_meta( $post_id, '_wsu_tp_end_date', $end_date );
+			}
 		} else {
 			delete_post_meta( $post_id, '_wsu_tp_end_date' );
 		}

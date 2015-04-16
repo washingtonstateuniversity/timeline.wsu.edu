@@ -24,3 +24,7 @@
 	line-height: 21px;
 	padding: 5px;
 }
+
+#wsu-timeline-point-data h4 {
+	font-size: 1.2em;
+}

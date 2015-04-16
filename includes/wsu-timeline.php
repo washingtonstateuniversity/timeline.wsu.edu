@@ -170,7 +170,7 @@ class WSU_Timeline {
 			<div class="clear"></div>
 		</div>
 
-		<h3 id="content-description">Timeline Item Description:</h3>
+		<h4 id="content-description">Timeline Item Description:</h4>
 		<p id="content-description-description" class="description">This is displayed publicly as the main content for the timeline item.</p>
 		<?php
 

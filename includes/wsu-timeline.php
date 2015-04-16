@@ -231,7 +231,7 @@ class WSU_Timeline {
 		}
 
 		if ( isset( $_POST['wsu_tp_video_url'] ) && ! empty( trim( $_POST['wsu_tp_video_url'] ) ) ) {
-			update_post_meta( $post_id, '_wsu_tp_video_url', esc_url_raw( $_POST['wsu_tp_vide_url'] ) );
+			update_post_meta( $post_id, '_wsu_tp_video_url', esc_url_raw( $_POST['wsu_tp_video_url'] ) );
 		} else {
 			delete_post_meta( $post_id, '_wsu_tp_video_url' );
 		}

@@ -124,6 +124,7 @@ class WSU_Timeline {
 		$start_date = get_post_meta( $post->ID, '_wsu_tp_start_date', true );
 		$end_date = get_post_meta( $post->ID, '_wsu_tp_end_date', true );
 		$external_url = get_post_meta( $post->ID, '_wsu_tp_external_url', true );
+		$video_url = get_post_meta( $post->ID, '_wsu_tp_video_url', true );
 		$submitter_source = get_post_meta( $post->ID, '_wsu_tp_story_source', true );
 
 		wp_nonce_field( 'wsu-timeline-save-point', '_wsu_timeline_point_nonce' );
@@ -143,6 +144,12 @@ class WSU_Timeline {
 				<input type="text" id="wsu-tp-end-date" name="wsu_tp_end_date" class="datepicker" value="<?php echo esc_attr( $end_date ); ?>" />
 			</div>
 			<p class="description">Use the first of the month or first of the year if a specific date is not available.</p>
+
+			<div class="capture-video-url">
+				<label for="wsu-tp-video-url">Video URL:</label>
+				<input type="text" id="wsu-tp-video-url" name="wsu_tp_video_url" value="<?php echo esc_attr( $video_url ); ?>" />
+				<p class="description">This URL may be used to embed a video in the timeline. YouTube is preferred, but we may be able to do something in the future with others.</p>
+			</div>
 
 			<label for="wsu-tp-external-url">External URL:</label>
 			<p class="description">This URL will be displayed publicly to provide a route to external information.</p>
@@ -221,6 +228,12 @@ class WSU_Timeline {
 			update_post_meta( $post_id, '_wsu_tp_end_date', sanitize_text_field( $_POST['wsu_tp_end_date'] ) );
 		} else {
 			delete_post_meta( $post_id, '_wsu_tp_end_date' );
+		}
+
+		if ( isset( $_POST['wsu_tp_video_url'] ) && ! empty( trim( $_POST['wsu_tp_video_url'] ) ) ) {
+			update_post_meta( $post_id, '_wsu_tp_video_url', esc_url_raw( $_POST['wsu_tp_vide_url'] ) );
+		} else {
+			delete_post_meta( $post_id, '_wsu_tp_video_url' );
 		}
 
 		if ( isset( $_POST['wsu_tp_external_url'] ) && ! empty( trim( $_POST['wsu_tp_external_url'] ) ) ) {

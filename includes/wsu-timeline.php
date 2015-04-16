@@ -130,37 +130,46 @@ class WSU_Timeline {
 		wp_nonce_field( 'wsu-timeline-save-point', '_wsu_timeline_point_nonce' );
 		?>
 		<div class="capture-point-data">
-			<label for="wsu-tp-sub-headline">Sub headline:</label>
-			<p class="description">This will provide additional context to the primary headline above.</p>
-			<input type="text" id="wsu-tp-sub-headline" name="wsu_tp_sub_headline" value="<?php echo esc_attr( $sub_headline ); ?>" />
-
-			<div class="capture-start-date">
-				<label for="wsu-tp-start-date" class="datepicker-label">Start Date:</label>
-				<input type="text" id="wsu-tp-start-date" name="wsu_tp_start_date" class="datepicker" value="<?php echo esc_attr( $start_date ); ?>" />
+			<div class="capture-section capture-sub-headline">
+				<label for="wsu-tp-sub-headline">Sub headline:</label>
+				<input type="text" id="wsu-tp-sub-headline" name="wsu_tp_sub_headline" value="<?php echo esc_attr( $sub_headline ); ?>" />
+				<p class="description">This will provide additional context to the primary headline above.</p>
 			</div>
 
-			<div class="capture-end-date">
-				<label for="wsu-tp-end-date" class="datepicker-label">End Date:</label>
-				<input type="text" id="wsu-tp-end-date" name="wsu_tp_end_date" class="datepicker" value="<?php echo esc_attr( $end_date ); ?>" />
-			</div>
-			<p class="description">Use the first of the month or first of the year if a specific date is not available.</p>
+			<div class="capture-section">
+				<div class="capture-start-date">
+					<label for="wsu-tp-start-date" class="datepicker-label">Start Date:</label>
+					<input type="text" id="wsu-tp-start-date" name="wsu_tp_start_date" class="datepicker" value="<?php echo esc_attr( $start_date ); ?>" />
+				</div>
 
-			<div class="capture-video-url">
+				<div class="capture-end-date">
+					<label for="wsu-tp-end-date" class="datepicker-label">End Date:</label>
+					<input type="text" id="wsu-tp-end-date" name="wsu_tp_end_date" class="datepicker" value="<?php echo esc_attr( $end_date ); ?>" />
+				</div>
+				<p class="description">Use the first of the month or first of the year if a specific date is not available.</p>
+			</div>
+
+			<div class="capture-section capture-video-url">
 				<label for="wsu-tp-video-url">Video URL:</label>
 				<input type="text" id="wsu-tp-video-url" name="wsu_tp_video_url" value="<?php echo esc_attr( $video_url ); ?>" />
 				<p class="description">This URL may be used to embed a video in the timeline. YouTube is preferred, but we may be able to do something in the future with others.</p>
 			</div>
 
-			<label for="wsu-tp-external-url">External URL:</label>
-			<p class="description">This URL will be displayed publicly to provide a route to external information.</p>
-			<input type="text" id="wsu-tp-external-url" name="wsu_tp_external_url" value="<?php echo esc_attr( $external_url ); ?>" />
+			<div class="capture-section capture-external-url">
+				<label for="wsu-tp-external-url">External URL:</label>
+				<input type="text" id="wsu-tp-external-url" name="wsu_tp_external_url" value="<?php echo esc_attr( $external_url ); ?>" />
+				<p class="description">This URL will be displayed publicly to provide a route to external information.</p>
+			</div>
 
-			<label for="wsu-tp-story-source">Background Information/Notes:</label>
-			<p class="description">These notes will not be displayed in the public view for a timeline item and can be used as part of the editorial process.</p>
-			<textarea id="wsu-tp-story-source" name="wsu_tp_story_source"><?php echo esc_textarea( $submitter_source ); ?></textarea>
+			<div class="capture-section capture-story-source">
+				<label for="wsu-tp-story-source">Background Information/Notes:</label>
+				<p class="description">These notes will not be displayed in the public view for a timeline item and can be used as part of the editorial process.</p>
+				<textarea id="wsu-tp-story-source" name="wsu_tp_story_source"><?php echo esc_textarea( $submitter_source ); ?></textarea>
+			</div>
 
 			<div class="clear"></div>
 		</div>
+
 		<h3 id="content-description">Timeline Item Description:</h3>
 		<p id="content-description-description" class="description">This is displayed publicly as the main content for the timeline item.</p>
 		<?php

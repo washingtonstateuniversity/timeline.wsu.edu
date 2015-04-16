@@ -1,0 +1,26 @@
+.capture-section {
+	width: 100%;
+	padding: 5px 0 5px 0;
+}
+
+.capture-section input {
+	font-size: 15px;
+	width: 100%;
+	max-width: 800px;
+	line-height: 23px;
+}
+
+.capture-section label {
+	font-size: 15px;
+	display: block;
+	margin: 3px 0 2px 0;
+	padding-left: 3px;
+}
+
+.capture-section textarea {
+	width: 100%;
+	height: 85px;
+	font-size: 14px;
+	line-height: 21px;
+	padding: 5px;
+}

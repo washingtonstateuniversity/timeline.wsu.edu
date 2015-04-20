@@ -36,8 +36,10 @@ while( $timeline_query->have_posts() ) {
 				echo '<figure class="timeline-featured-image"><img src="' . esc_url( spine_get_featured_image_src( 'spine-small_size' ) ) . '"></figure>';
 			}
 			?>
-			<span class="start-date"><?php echo esc_html( $start_date ); ?></span>
-			<?php if ( ! empty( $end_date ) ) : ?><span class="end-date"><?php echo esc_html( $end_date ); ?></span><?php endif; ?>
+			<div class="timeline-item-date-wrapper">
+				<span class="start-date"><?php echo esc_html( $start_date ); ?></span>
+				<?php if ( ! empty( $end_date ) ) : ?><span class="end-date"><?php echo esc_html( $end_date ); ?></span><?php endif; ?>
+			</div>
 			<?php if ( ! empty( $external_url ) ) : ?><span class="external-url"><a href="<?php echo esc_url( $external_url ); ?>"><?php echo esc_url( $external_url ); ?></a></span><?php endif; ?>
 			<div class="timeline-content timeline-content-<?php echo $column_class; ?>">
 				<?php

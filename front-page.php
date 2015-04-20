@@ -50,6 +50,7 @@ while( $timeline_query->have_posts() ) {
 				$content = str_replace( '<p></p>', '', $content );
 				echo $content;
 				?>
+				<a class="temporary-link" href="<?php echo esc_url( get_the_permalink( get_the_ID() ) ); ?>">view</a>
 			</div>
 		</div>
 	</div>

@@ -11,7 +11,7 @@ $item_decade = 1890;
 <main>
 	<section class="halves row">
 		<div class="century-1800">
-			<div class="century-1890">
+			<div class="decade-1890">
 <?php
 
 $timeline_query = wsu_timeline_get_items();
@@ -47,7 +47,12 @@ while( $timeline_query->have_posts() ) {
 
 	if ( $end_date && 8 === strlen( $end_date ) ) {
 		$end_date = DateTime::createFromFormat( 'Ymd', $end_date );
-		$end_date = $end_date->format( 'j F Y' );
+		if ( $end_date ) {
+			$end_date = $end_date->format( 'j F Y' );
+		} else {
+			$end_date = '';
+		}
+
 	} else {
 		$end_date = ''; // We aren't too worried about an end date being available or valid.
 	}

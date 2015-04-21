@@ -9,6 +9,13 @@ $timeline_decade = 1890;
 $item_decade = 1890;
 ?>
 <main>
+	<?php if ( have_posts() ) : while( have_posts() ) : the_post(); ?>
+	<section class="single row">
+		<div class="column one">
+			<?php the_content(); ?>
+		</div>
+	</section>
+	<?php endwhile; endif; ?>
 	<section class="halves row">
 		<div class="century-1800">
 			<div class="decade-1890">

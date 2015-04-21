@@ -1,14 +1,23 @@
 <?php
 
 get_header();
+
+// Set a starting century and decade for the timeline.
+$timeline_century = 1800;
+$item_century = 1800;
+$timeline_decade = 1890;
+$item_decade = 1890;
 ?>
 <main>
 	<section class="halves row">
+		<div class="century-1800">
+			<div class="century-1890">
 <?php
 
 $timeline_query = wsu_timeline_get_items();
 
 $flip_flop = 0;
+
 while( $timeline_query->have_posts() ) {
 	$timeline_query->the_post();
 
@@ -24,6 +33,8 @@ while( $timeline_query->have_posts() ) {
 	$external_url          = get_post_meta( get_the_ID(), '_wsu_tp_external_url', true );
 
 	if ( $start_date && 8 === strlen( $start_date ) ) {
+		$item_century = absint( substr( $start_date, 0, 2 ) . '00' );
+		$item_decade = absint( substr( $start_date, 0, 3 ) . '0' );
 		$start_date = DateTime::createFromFormat( 'Ymd', $start_date );
 		$start_date = $start_date->format( 'j F Y' );
 	} elseif ( $start_date && 10 === strlen( $start_date ) ) {
@@ -50,6 +61,30 @@ while( $timeline_query->have_posts() ) {
 	}
 
 	$item_has_featured_image = spine_has_featured_image();
+
+	// If a decade is ending, close out the container. This should be closed out
+	// before any century container.
+	if ( $item_decade >  $timeline_decade ) {
+		echo '</div><!-- end decade ' . $timeline_decade . ' -->' . "\n";
+	}
+
+	// If a century is ending, close out the container. This should be closed out
+	// after any decade container.
+	if ( $item_century > $timeline_century ) {
+		echo '</div><!-- end century ' . $timeline_century . '-->' ."\n";
+	}
+
+	// If a new century is beginning, start a container.
+	if ( $item_century > $timeline_century ) {
+		$timeline_century = $item_century;
+		echo '<div class="century-' . $timeline_century . '">';
+	}
+
+	// If a new decade is beginning, start a container.
+	if ( $item_decade >  $timeline_decade ) {
+		$timeline_decade = $item_decade;
+		echo '<div class="decade-' . $timeline_decade . '">';
+	}
 	?>
 	<div class="column <?php echo $column_class; ?> timeline-item-container <?php if ( $item_has_featured_image ) : echo 'item-has-featured-image'; endif; ?>">
 		<div class="timeline-item-internal-wrapper">
@@ -90,6 +125,8 @@ while( $timeline_query->have_posts() ) {
 }
 
 ?>
+			</div><!-- end decade -->
+		</div><!-- end century -->
 	</section>
 </main>
 <?php

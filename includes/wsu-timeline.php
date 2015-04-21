@@ -1,20 +1,9 @@
 <?php
-/*
-Plugin Name: WSU Timeline (125th)
-Version: 0.3.0
-Plugin URI: http://web.wsu.edu
-Description: Provides the content requirements for the display of a timeline.
-Author: washingtonstateuniversity, jeremyfelt
-Author URI: http://web.wsu.edu
-*/
 
-if ( ! class_exists( 'WSU_TIMELINE' ) ) :
+/**
+ * Class WSU_Timeline
+ */
 class WSU_Timeline {
-	/**
-	 * @var string Current plugin version for cache breaking
-	 */
-	var $version = '0.3.0';
-
 	/**
 	 * @var string Slug used for the timeline point content type.
 	 */
@@ -44,8 +33,8 @@ class WSU_Timeline {
 		}
 
 		wp_enqueue_style( 'jquery-ui-styles', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.min.css' );
-		wp_enqueue_style( 'wsu-tp-admin-styles', get_stylesheet_directory_uri() . '/css/admin.css', array(), $this->version );
-		wp_enqueue_script( 'wsu-tp-admin-scripts', get_stylesheet_directory_uri() . '/js/admin.js', array( 'jquery-ui-datepicker' ), $this->version, true );
+		wp_enqueue_style( 'wsu-tp-admin-styles', get_stylesheet_directory_uri() . '/css/admin.css', array(), WSU_Timeline_Theme::$version );
+		wp_enqueue_script( 'wsu-tp-admin-scripts', get_stylesheet_directory_uri() . '/js/admin.js', array( 'jquery-ui-datepicker' ), WSU_Timeline_Theme::$version, true );
 	}
 
 	/**
@@ -127,6 +116,9 @@ class WSU_Timeline {
 		$video_url = get_post_meta( $post->ID, '_wsu_tp_video_url', true );
 		$submitter_source = get_post_meta( $post->ID, '_wsu_tp_story_source', true );
 
+		$start_date = $this->string_date_to_slash( $start_date );
+		$end_date = $this->string_date_to_slash( $end_date );
+
 		wp_nonce_field( 'wsu-timeline-save-point', '_wsu_timeline_point_nonce' );
 		?>
 		<div class="capture-point-data">
@@ -198,6 +190,47 @@ class WSU_Timeline {
 		</div>
 	<?php
 	}
+
+	/**
+	 * Turn a string of YYYYMMDD and turn it into a date string separated
+	 * by "/" for input and readability in the admin.
+	 *
+	 * @param string $date
+	 *
+	 * @return bool|string
+	 */
+	public function string_date_to_slash( $date ) {
+		if ( 8 !== strlen( $date ) ) {
+			return false;
+		}
+
+		$date = DateTime::createFromFormat( 'Ymd', $date );
+
+		return $date->format( 'm/d/Y' );
+	}
+
+	/**
+	 * Take a date string separated by "/" and turn it into a string of
+	 * YYYYMMDD for better sorting in the database and on output.
+	 *
+	 * @param string $date
+	 *
+	 * @return bool|string
+	 */
+	public function slash_date_to_string( $date ) {
+		if ( 10 !== strlen( $date ) ) {
+			return false;
+		}
+
+		if ( 2 !== substr_count( $date, '/' ) ) {
+			return false;
+		}
+
+		$date = DateTime::createFromFormat( 'm/d/Y', $date );
+
+		return $date->format( 'Ymd' );
+	}
+
 	/**
 	 * Save all of the meta data associated with a timeline point when saved.
 	 *
@@ -228,13 +261,21 @@ class WSU_Timeline {
 		}
 
 		if ( isset( $_POST['wsu_tp_start_date'] ) && ! empty( trim( $_POST['wsu_tp_start_date'] ) ) ) {
-			update_post_meta( $post_id, '_wsu_tp_start_date', sanitize_text_field( $_POST['wsu_tp_start_date'] ) );
+			$start_date = $this->slash_date_to_string( $_POST['wsu_tp_start_date'] );
+
+			if ( $start_date ) {
+				update_post_meta( $post_id, '_wsu_tp_start_date', $start_date );
+			}
 		} else {
 			delete_post_meta( $post_id, '_wsu_tp_start_date' );
 		}
 
 		if ( isset( $_POST['wsu_tp_end_date'] ) && ! empty( trim( $_POST['wsu_tp_end_date'] ) ) ) {
-			update_post_meta( $post_id, '_wsu_tp_end_date', sanitize_text_field( $_POST['wsu_tp_end_date'] ) );
+			$end_date = $this->slash_date_to_string( $_POST['wsu_tp_end_date'] );
+
+			if ( $end_date ) {
+				update_post_meta( $post_id, '_wsu_tp_end_date', $end_date );
+			}
 		} else {
 			delete_post_meta( $post_id, '_wsu_tp_end_date' );
 		}
@@ -308,12 +349,22 @@ class WSU_Timeline {
 	public function manage_item_posts_custom_column( $column_name, $post_id ) {
 		if ( 'start_date' === $column_name ) {
 			$start_date = get_post_meta( $post_id, '_wsu_tp_start_date', true );
-			echo esc_html( $start_date );
+			$date = $this->string_date_to_slash( $start_date );
+			if ( $date ) {
+				echo $date;
+			} else {
+				echo esc_html( $start_date );
+			}
 		}
 
 		if ( 'end_date' === $column_name ) {
 			$end_date = get_post_meta( $post_id, '_wsu_tp_end_date', true );
-			echo esc_html( $end_date );
+			$date = $this->string_date_to_slash( $end_date );
+			if ( $date ) {
+				echo $date;
+			} else {
+				echo esc_html( $end_date );
+			}
 		}
 	}
 
@@ -333,5 +384,9 @@ class WSU_Timeline {
 		return $title_placeholder;
 	}
 }
-new WSU_Timeline();
-endif;
+$wsu_timeline = new WSU_Timeline();
+
+function wsu_timeline_slash_date_to_string( $date ) {
+	global $wsu_timeline;
+	return $wsu_timeline->slash_date_to_string( $date );
+}

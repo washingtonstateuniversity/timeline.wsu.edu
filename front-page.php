@@ -19,9 +19,35 @@ while( $timeline_query->have_posts() ) {
 	}
 
 	$timeline_sub_headline = get_post_meta( get_the_ID(), '_wsu_tp_sub_headline', true );
-	$start_date = get_post_meta( $post->ID, '_wsu_tp_start_date', true );
-	$end_date = get_post_meta( $post->ID, '_wsu_tp_end_date', true );
-	$external_url = get_post_meta( $post->ID, '_wsu_tp_external_url', true );
+	$start_date            = get_post_meta( get_the_ID(), '_wsu_tp_start_date',   true );
+	$end_date              = get_post_meta( get_the_ID(), '_wsu_tp_end_date',     true );
+	$external_url          = get_post_meta( get_the_ID(), '_wsu_tp_external_url', true );
+
+	if ( $start_date && 8 === strlen( $start_date ) ) {
+		$start_date = DateTime::createFromFormat( 'Ymd', $start_date );
+		$start_date = $start_date->format( 'j F Y' );
+	} elseif ( $start_date && 10 === strlen( $start_date ) ) {
+		// We'll run this once to convert current items. Cheap fix. ;)
+		$start_date = wsu_timeline_slash_date_to_string( $start_date );
+		update_post_meta( get_the_ID(), '_wsu_tp_start_date', $start_date );
+		$start_date = DateTime::createFromFormat( 'Ymd', $start_date );
+		$start_date = $start_date->format( 'j F Y' );
+	} else {
+		$start_date = 'Invalid Format';
+	}
+
+	if ( $end_date && 8 === strlen( $end_date ) ) {
+		$end_date = DateTime::createFromFormat( 'Ymd', $end_date );
+		$end_date = $end_date->format( 'j F Y' );
+	} elseif ( $end_date && 10 === strlen( $end_date ) ) {
+		// We'll run this once to convert current items. Another cheap fix. ;)
+		$end_date = wsu_timeline_slash_date_to_string( $end_date );
+		update_post_meta( get_the_ID(), '_wsu_tp_end_date', $end_date );
+		$end_date = DateTime::createFromFormat( 'Ymd', $end_date );
+		$end_date = $end_date->format( 'j F Y' );
+	} elseif ( $end_date ) {
+		$end_date = 'Invalid End Format';
+	}
 
 	$item_has_featured_image = spine_has_featured_image();
 	?>

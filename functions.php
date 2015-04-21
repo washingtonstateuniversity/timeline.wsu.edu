@@ -5,6 +5,11 @@ include_once( __DIR__ . '/includes/wsu-timeline.php' );
 
 class WSU_Timeline_Theme {
 	/**
+	 * @var string Theme version for cache breaking.
+	 */
+	public static $version = '0.3.1';
+
+	/**
 	 * Setup hooks for the theme.
 	 */
 	public function __construct() {
@@ -12,6 +17,11 @@ class WSU_Timeline_Theme {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 	}
 
+	/**
+	 * Retrieve a list timeline items.
+	 *
+	 * @return WP_Query
+	 */
 	public function get_timeline_items() {
 		$args = array(
 			'post_type' => 'wsu-timeline-point',
@@ -31,6 +41,9 @@ class WSU_Timeline_Theme {
 		wp_enqueue_style( 'spine-theme-child' );
 	}
 
+	/**
+	 * Enqueue the scripts used in the theme.
+	 */
 	public function enqueue_scripts() {
 		wp_enqueue_script( 'wsu-home-typekit', 'https://use.typekit.net/roi0hte.js', array(), false, false );
 		wp_enqueue_script( 'wsu-timeline', get_stylesheet_directory_uri() . '/js/timeline.js', array( 'jquery' ), spine_get_script_version(), true );
@@ -38,6 +51,11 @@ class WSU_Timeline_Theme {
 }
 $wsu_timeline_theme = new WSU_Timeline_Theme();
 
+/**
+ * Wrapper to retrieve a list of timeline items.
+ *
+ * @return WP_Query
+ */
 function wsu_timeline_get_items() {
 	global $wsu_timeline_theme;
 	return $wsu_timeline_theme->get_timeline_items();

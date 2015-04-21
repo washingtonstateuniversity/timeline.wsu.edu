@@ -113,11 +113,6 @@ while( $timeline_query->have_posts() ) {
 				<h2><?php the_title(); ?></h2>
 				<?php if ( ! empty( $timeline_sub_headline ) ) : ?><h3><?php echo $timeline_sub_headline; ?></h3><?php endif; ?>
 			</header>
-			<?php
-			if ( $item_has_featured_image ) {
-				echo '<figure class="timeline-featured-image"><img src="' . esc_url( spine_get_featured_image_src( 'spine-small_size' ) ) . '"></figure>';
-			}
-			?>
 			<div class="timeline-item-date-wrapper">
 				<span class="start-date"><?php echo esc_html( $start_date ); ?></span>
 				<?php if ( ! empty( $end_date ) ) : ?><span class="end-date"><?php echo esc_html( $end_date ); ?></span><?php endif; ?>
@@ -134,6 +129,11 @@ while( $timeline_query->have_posts() ) {
 				?>
 				<a class="temporary-link" href="<?php echo esc_url( get_the_permalink( get_the_ID() ) ); ?>">view</a>
 			</div>
+			<?php
+			if ( $item_has_featured_image ) {
+				echo '<figure class="timeline-featured-image"><img src="' . esc_url( spine_get_featured_image_src( 'spine-small_size' ) ) . '"></figure>';
+			}
+			?>
 		</div>
 	</div>
 	<?php

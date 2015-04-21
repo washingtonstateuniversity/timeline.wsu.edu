@@ -4,9 +4,14 @@ get_header();
 
 // Set a starting century and decade for the timeline.
 $timeline_century = 1800;
-$item_century = 1800;
-$timeline_decade = 1890;
-$item_decade = 1890;
+$item_century     = 1800;
+$timeline_decade  = 1890;
+$item_decade      = 1890;
+$item_year        = 1890;
+$item_month       = 189001;
+
+// Used to control the `one` and `two` column classes when alternating items.
+$flip_flop = 0;
 ?>
 <main>
 	<?php if ( have_posts() ) : while( have_posts() ) : the_post(); ?>
@@ -17,22 +22,16 @@ $item_decade = 1890;
 	</section>
 	<?php endwhile; endif; ?>
 	<section class="halves row">
-		<div class="century-1800">
-			<div class="decade-1890">
+		<div class="century century-1800">
+			<div class="decade decade-1890">
 <?php
 
 $timeline_query = wsu_timeline_get_items();
 
-$flip_flop = 0;
-
 while( $timeline_query->have_posts() ) {
 	$timeline_query->the_post();
 
-	if ( 0 === $flip_flop ) {
-		$column_class = 'one';
-	} else {
-		$column_class = 'two';
-	}
+	$column_class = ( 0 === $flip_flop ) ? 'one' : 'two';
 
 	$timeline_sub_headline = get_post_meta( get_the_ID(), '_wsu_tp_sub_headline', true );
 	$start_date            = get_post_meta( get_the_ID(), '_wsu_tp_start_date',   true );
@@ -40,8 +39,15 @@ while( $timeline_query->have_posts() ) {
 	$external_url          = get_post_meta( get_the_ID(), '_wsu_tp_external_url', true );
 
 	if ( $start_date && 8 === strlen( $start_date ) ) {
+		// Build the item's century using the first two year digits.
 		$item_century = absint( substr( $start_date, 0, 2 ) . '00' );
-		$item_decade = absint( substr( $start_date, 0, 3 ) . '0' );
+		// Build the item's decade using the first three year digits.
+		$item_decade  = absint( substr( $start_date, 0, 3 ) . '0' );
+		// Build the item's year using the first four date digits.
+		$item_year    = absint( substr( $start_date, 0, 4 ) );
+		// Build the item's month using the first six date digits.
+		$item_month   = absint( substr( $start_date, 0, 6 ) );
+
 		$start_date = DateTime::createFromFormat( 'Ymd', $start_date );
 		if ( $start_date ) {
 			$start_date = $start_date->format( 'j F Y' );
@@ -59,12 +65,9 @@ while( $timeline_query->have_posts() ) {
 		} else {
 			$end_date = '';
 		}
-
 	} else {
 		$end_date = ''; // We aren't too worried about an end date being available or valid.
 	}
-
-	$item_has_featured_image = spine_has_featured_image();
 
 	// If a decade is ending, close out the container. This should be closed out
 	// before any century container.
@@ -81,26 +84,42 @@ while( $timeline_query->have_posts() ) {
 	// If a new century is beginning, start a container.
 	if ( $item_century > $timeline_century ) {
 		$timeline_century = $item_century;
-		echo '<div class="century-' . $timeline_century . '">';
+		echo '<div class="century century-' . $timeline_century . '">';
 	}
 
 	// If a new decade is beginning, start a container.
 	if ( $item_decade >  $timeline_decade ) {
 		$timeline_decade = $item_decade;
-		echo '<div class="decade-' . $timeline_decade . '">';
+		echo '<div class="decade decade-' . $timeline_decade . '">';
+	}
+
+	$column_classes = array(
+		'column',
+		$column_class,
+		'timeline-item-container',
+		'item-year-' . $item_year,
+		'item-month-' . $item_month,
+	);
+
+	$item_has_featured_image = spine_has_featured_image();
+
+	if ( $item_has_featured_image ) {
+		$column_classes[] = 'item-has-featured-image';
 	}
 	?>
-	<div class="column <?php echo $column_class; ?> timeline-item-container <?php if ( $item_has_featured_image ) : echo 'item-has-featured-image'; endif; ?>">
+	<div class="<?php echo implode( ' ', $column_classes ); ?>">
+		<?php if ( $item_has_featured_image ) : ?>
+		<div class="timeline-item-feature-wrapper">
+			<figure class="timeline-item-feature">
+				<img src="<?php echo esc_url( spine_get_featured_image_src( 'spine-xlarge_size' ) ); ?>">
+			</figure>
+		</div>
+		<?php endif; ?>
 		<div class="timeline-item-internal-wrapper">
 			<header>
 				<h2><?php the_title(); ?></h2>
 				<?php if ( ! empty( $timeline_sub_headline ) ) : ?><h3><?php echo $timeline_sub_headline; ?></h3><?php endif; ?>
 			</header>
-			<?php
-			if ( $item_has_featured_image ) {
-				echo '<figure class="timeline-featured-image"><img src="' . esc_url( spine_get_featured_image_src( 'spine-small_size' ) ) . '"></figure>';
-			}
-			?>
 			<div class="timeline-item-date-wrapper">
 				<span class="start-date"><?php echo esc_html( $start_date ); ?></span>
 				<?php if ( ! empty( $end_date ) ) : ?><span class="end-date"><?php echo esc_html( $end_date ); ?></span><?php endif; ?>
@@ -108,26 +127,39 @@ while( $timeline_query->have_posts() ) {
 			<?php if ( ! empty( $external_url ) ) : ?><span class="external-url"><a href="<?php echo esc_url( $external_url ); ?>"><?php echo esc_url( $external_url ); ?></a></span><?php endif; ?>
 			<div class="timeline-content timeline-content-<?php echo $column_class; ?>">
 				<?php
+				// Retrieve the item's content and prep for discovery of the first paragraph.
 				$content = apply_filters( 'the_content', get_the_content() );
 				$content = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $content );
-				$content = strip_tags( $content, '<p><a><span><div><strong><em><b><i><sup><sub><ul><li><h1><h2><h3><h4><h5><h6>' );
 				$content = str_replace( '<p>&nbsp;</p>', '', $content );
 				$content = str_replace( '<p></p>', '', $content );
-				echo $content;
+				$content = trim( $content );
+
+				// Find a match for the first paragraph.
+				preg_match( '/<p>(.*)<\/p>/', $content, $matches );
+
+				// If a match exists, strip it from the remaining content. Remaining content
+				// will then be used for the expanded view.
+				if ( $matches && isset( $matches[0] ) ) {
+					echo $matches[0];
+					$content = str_replace( $matches[0], '', $content );
+				}
 				?>
-				<a class="temporary-link" href="<?php echo esc_url( get_the_permalink( get_the_ID() ) ); ?>">view</a>
+				<div class="timeline-content-expanded">
+					<?php echo $content; ?>
+				</div>
 			</div>
+			<?php
+			if ( $item_has_featured_image ) {
+				echo '<figure class="timeline-featured-image"><img src="' . esc_url( spine_get_featured_image_src( 'spine-small_size' ) ) . '"></figure>';
+			}
+			?>
 		</div>
 	</div>
 	<?php
 
-	if ( 0 === $flip_flop ) {
-		$flip_flop++;
-	} else {
-		$flip_flop = 0;
-	}
-}
+	$flip_flop = ( 0 === $flip_flop ) ? 1 : 0;
 
+} // end while timeline_query->have_posts()
 ?>
 			</div><!-- end decade -->
 		</div><!-- end century -->

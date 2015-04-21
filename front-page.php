@@ -19,9 +19,9 @@ while( $timeline_query->have_posts() ) {
 	}
 
 	$timeline_sub_headline = get_post_meta( get_the_ID(), '_wsu_tp_sub_headline', true );
-	$start_date = get_post_meta( $post->ID, '_wsu_tp_start_date', true );
-	$end_date = get_post_meta( $post->ID, '_wsu_tp_end_date', true );
-	$external_url = get_post_meta( $post->ID, '_wsu_tp_external_url', true );
+	$start_date            = get_post_meta( get_the_ID(), '_wsu_tp_start_date',   true );
+	$end_date              = get_post_meta( get_the_ID(), '_wsu_tp_end_date',     true );
+	$external_url          = get_post_meta( get_the_ID(), '_wsu_tp_external_url', true );
 
 	if ( $start_date && 8 === strlen( $start_date ) ) {
 		$start_date = DateTime::createFromFormat( 'Ymd', $start_date );

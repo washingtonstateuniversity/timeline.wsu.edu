@@ -148,11 +148,22 @@ while( $timeline_query->have_posts() ) {
 					<?php echo $content; ?>
 				</div>
 			</div>
-			<?php
-			if ( $item_has_featured_image ) {
-				echo '<figure class="timeline-featured-image"><img src="' . esc_url( spine_get_featured_image_src( 'spine-small_size' ) ) . '"></figure>';
-			}
-			?>
+			<div class="timeline-item-footer">
+				<?php
+				if ( $item_has_featured_image ) {
+					echo '<figure class="timeline-featured-image"><img src="' . esc_url( spine_get_featured_image_src( 'spine-small_size' ) ) . '"></figure>';
+				} else {
+					echo '<div class="timeline-featured-empty"></div>';
+				}
+				?>
+				<div class="timeline-item-footer-meta">
+					<span class="timeline-item-read-more">Read More</span>
+					<div class="timeline-item-social">
+						<a href="https://www.facebook.com/sharer/sharer.php?u=" class="tracked">Facebook</a>
+						<a href="https://twitter.com/intent/tweet?text=" target="_blank" class="tracked">Twitter</a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<?php

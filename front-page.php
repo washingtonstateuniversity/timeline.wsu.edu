@@ -108,6 +108,13 @@ while( $timeline_query->have_posts() ) {
 	}
 	?>
 	<div class="<?php echo implode( ' ', $column_classes ); ?>">
+		<?php if ( $item_has_featured_image ) : ?>
+		<div class="timeline-item-feature-wrapper">
+			<figure class="timeline-item-feature">
+				<img src="<?php echo esc_url( spine_get_featured_image_src( 'spine-xlarge_size' ) ); ?>">
+			</figure>
+		</div>
+		<?php endif; ?>
 		<div class="timeline-item-internal-wrapper">
 			<header>
 				<h2><?php the_title(); ?></h2>

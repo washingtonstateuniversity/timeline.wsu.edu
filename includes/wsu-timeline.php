@@ -426,10 +426,38 @@ class WSU_Timeline {
 
 		return $title_placeholder;
 	}
+
+	/**
+	 * Retrieve a list timeline items.
+	 *
+	 * @return WP_Query
+	 */
+	public function get_timeline_items() {
+		$args = array(
+			'post_type' => $this->point_content_type_slug,
+			'posts_per_page' => 2000,
+			'order'     => 'ASC',
+			'meta_key' => '_wsu_tp_start_date',
+			'orderby'   => 'meta_value_num',
+		);
+		$query = new WP_Query( $args );
+		wp_reset_query();
+		return $query;
+	}
 }
 $wsu_timeline = new WSU_Timeline();
 
 function wsu_timeline_slash_date_to_string( $date ) {
 	global $wsu_timeline;
 	return $wsu_timeline->slash_date_to_string( $date );
+}
+
+/**
+ * Wrapper to retrieve a list of timeline items.
+ *
+ * @return WP_Query
+ */
+function wsu_timeline_get_items() {
+	global $wsu_timeline;
+	return $wsu_timeline->get_timeline_items();
 }

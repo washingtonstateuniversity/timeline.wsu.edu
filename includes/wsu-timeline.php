@@ -222,6 +222,10 @@ class WSU_Timeline {
 			return false;
 		}
 
+		if ( 2 !== substr_count( $date, '/' ) ) {
+			return false;
+		}
+
 		$date = DateTime::createFromFormat( 'm/d/Y', $date );
 
 		return $date->format( 'Ymd' );

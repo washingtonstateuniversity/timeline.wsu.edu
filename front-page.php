@@ -22,8 +22,8 @@ $flip_flop = 0;
 	</section>
 	<?php endwhile; endif; ?>
 	<section class="halves row">
-		<div class="century-1800">
-			<div class="decade-1890">
+		<div class="century century-1800">
+			<div class="decade decade-1890">
 <?php
 
 $timeline_query = wsu_timeline_get_items();
@@ -84,13 +84,13 @@ while( $timeline_query->have_posts() ) {
 	// If a new century is beginning, start a container.
 	if ( $item_century > $timeline_century ) {
 		$timeline_century = $item_century;
-		echo '<div class="century-' . $timeline_century . '">';
+		echo '<div class="century century-' . $timeline_century . '">';
 	}
 
 	// If a new decade is beginning, start a container.
 	if ( $item_decade >  $timeline_decade ) {
 		$timeline_decade = $item_decade;
-		echo '<div class="decade-' . $timeline_decade . '">';
+		echo '<div class="decade decade-' . $timeline_decade . '">';
 	}
 
 	$column_classes = array(

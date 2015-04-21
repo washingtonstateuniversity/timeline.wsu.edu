@@ -7,6 +7,8 @@ $timeline_century = 1800;
 $item_century     = 1800;
 $timeline_decade  = 1890;
 $item_decade      = 1890;
+$item_year        = 1890;
+$item_month       = 189001;
 
 // Used to control the `one` and `two` column classes when alternating items.
 $flip_flop = 0;
@@ -41,6 +43,10 @@ while( $timeline_query->have_posts() ) {
 		$item_century = absint( substr( $start_date, 0, 2 ) . '00' );
 		// Build the item's decade using the first three year digits.
 		$item_decade  = absint( substr( $start_date, 0, 3 ) . '0' );
+		// Build the item's year using the first four date digits.
+		$item_year    = absint( substr( $start_date, 0, 4 ) );
+		// Build the item's month using the first six date digits.
+		$item_month   = absint( substr( $start_date, 0, 6 ) );
 
 		$start_date = DateTime::createFromFormat( 'Ymd', $start_date );
 		if ( $start_date ) {
@@ -87,9 +93,21 @@ while( $timeline_query->have_posts() ) {
 		echo '<div class="decade-' . $timeline_decade . '">';
 	}
 
+	$column_classes = array(
+		'column',
+		$column_class,
+		'timeline-item-container',
+		'item-year-' . $item_year,
+		'item-month-' . $item_month,
+	);
+
 	$item_has_featured_image = spine_has_featured_image();
+
+	if ( $item_has_featured_image ) {
+		$column_classes[] = 'item-has-featured-image';
+	}
 	?>
-	<div class="column <?php echo $column_class; ?> timeline-item-container <?php if ( $item_has_featured_image ) : echo 'item-has-featured-image'; endif; ?>">
+	<div class="<?php echo implode( ' ', $column_classes ); ?>">
 		<div class="timeline-item-internal-wrapper">
 			<header>
 				<h2><?php the_title(); ?></h2>

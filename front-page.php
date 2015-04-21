@@ -127,14 +127,26 @@ while( $timeline_query->have_posts() ) {
 			<?php if ( ! empty( $external_url ) ) : ?><span class="external-url"><a href="<?php echo esc_url( $external_url ); ?>"><?php echo esc_url( $external_url ); ?></a></span><?php endif; ?>
 			<div class="timeline-content timeline-content-<?php echo $column_class; ?>">
 				<?php
+				// Retrieve the item's content and prep for discovery of the first paragraph.
 				$content = apply_filters( 'the_content', get_the_content() );
 				$content = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $content );
-				$content = strip_tags( $content, '<p><a><span><div><strong><em><b><i><sup><sub><ul><li><h1><h2><h3><h4><h5><h6>' );
 				$content = str_replace( '<p>&nbsp;</p>', '', $content );
 				$content = str_replace( '<p></p>', '', $content );
-				echo $content;
+				$content = trim( $content );
+
+				// Find a match for the first paragraph.
+				preg_match( '/<p>(.*)<\/p>/', $content, $matches );
+
+				// If a match exists, strip it from the remaining content. Remaining content
+				// will then be used for the expanded view.
+				if ( $matches && isset( $matches[0] ) ) {
+					echo $matches[0];
+					$content = str_replace( $matches[0], '', $content );
+				}
 				?>
-				<a class="temporary-link" href="<?php echo esc_url( get_the_permalink( get_the_ID() ) ); ?>">view</a>
+				<div class="timeline-content-expanded">
+					<?php echo $content; ?>
+				</div>
 			</div>
 			<?php
 			if ( $item_has_featured_image ) {

@@ -10,11 +10,16 @@ class WSU_Timeline {
 	var $point_content_type_slug = 'wsu-timeline-point';
 
 	/**
+	 * @var string Slug used for the timeline decade content type.
+	 */
+	var $decade_content_type_slug = 'wsu-timeline-decade';
+
+	/**
 	 * Setup plugin.
 	 */
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 10 );
-		add_action( 'init', array( $this, 'register_content_type' ), 10 );
+		add_action( 'init', array( $this, 'register_content_types' ), 10 );
 		add_action( 'init', array( $this, 'setup_custom_taxonomies' ), 99 );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10 );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
@@ -38,9 +43,9 @@ class WSU_Timeline {
 	}
 
 	/**
-	 * Register the content type be used to track points on a timeline.
+	 * Register the content types used for displaying information on the timeline.
 	 */
-	public function register_content_type() {
+	public function register_content_types() {
 		$labels = array(
 			'name'               => __( 'Timeline Items', 'wsuwp_uc' ),
 			'singular_name'      => __( 'Timeline Item', 'wsuwp_uc' ),
@@ -76,6 +81,36 @@ class WSU_Timeline {
 			)
 		);
 		register_post_type( $this->point_content_type_slug, $args );
+
+		$labels = array(
+			'name'               => 'Timeline Decades',
+			'singular_name'      => 'Timeline Decade',
+			'all_items'          => 'All Timeline Decades',
+			'add_new_item'       => 'Add New Decade',
+			'edit_item'          => 'Edit Decade',
+			'new_item'           => 'New Decade',
+			'view_item'          => 'View Decade',
+			'search_item'        => 'Search Decades',
+			'not_found'          => 'No decades found',
+			'not_found_in_trash' => 'No decades found in trash',
+		);
+
+		$args = array(
+			'labels' => $labels,
+			'description' => 'Decades in the WSU Timeline',
+			'public' => false,
+			'show_ui' => true,
+			'hieararchical' => false,
+			'menu_icon' => 'dashicons-calendar',
+			'supports' => array(
+				'title',
+				'editor',
+				'revisions',
+				'thumbnail',
+			),
+			'has_archive' => false,
+		);
+		register_post_type( $this->decade_content_type_slug, $args );
 	}
 
 	/**

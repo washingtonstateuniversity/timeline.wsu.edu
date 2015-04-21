@@ -5,6 +5,11 @@ include_once( __DIR__ . '/includes/wsu-timeline.php' );
 
 class WSU_Timeline_Theme {
 	/**
+	 * @var string Theme version for cache breaking.
+	 */
+	public static $version = '0.3.1';
+
+	/**
 	 * Setup hooks for the theme.
 	 */
 	public function __construct() {

@@ -1,20 +1,9 @@
 <?php
-/*
-Plugin Name: WSU Timeline (125th)
-Version: 0.3.0
-Plugin URI: http://web.wsu.edu
-Description: Provides the content requirements for the display of a timeline.
-Author: washingtonstateuniversity, jeremyfelt
-Author URI: http://web.wsu.edu
-*/
 
-if ( ! class_exists( 'WSU_TIMELINE' ) ) :
+/**
+ * Class WSU_Timeline
+ */
 class WSU_Timeline {
-	/**
-	 * @var string Current plugin version for cache breaking
-	 */
-	var $version = '0.3.0';
-
 	/**
 	 * @var string Slug used for the timeline point content type.
 	 */
@@ -44,8 +33,8 @@ class WSU_Timeline {
 		}
 
 		wp_enqueue_style( 'jquery-ui-styles', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.min.css' );
-		wp_enqueue_style( 'wsu-tp-admin-styles', get_stylesheet_directory_uri() . '/css/admin.css', array(), $this->version );
-		wp_enqueue_script( 'wsu-tp-admin-scripts', get_stylesheet_directory_uri() . '/js/admin.js', array( 'jquery-ui-datepicker' ), $this->version, true );
+		wp_enqueue_style( 'wsu-tp-admin-styles', get_stylesheet_directory_uri() . '/css/admin.css', array(), WSU_Timeline_Theme::$version );
+		wp_enqueue_script( 'wsu-tp-admin-scripts', get_stylesheet_directory_uri() . '/js/admin.js', array( 'jquery-ui-datepicker' ), WSU_Timeline_Theme::$version, true );
 	}
 
 	/**
@@ -392,7 +381,6 @@ class WSU_Timeline {
 	}
 }
 $wsu_timeline = new WSU_Timeline();
-endif;
 
 function wsu_timeline_slash_date_to_string( $date ) {
 	global $wsu_timeline;

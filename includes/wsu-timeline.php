@@ -206,7 +206,11 @@ class WSU_Timeline {
 
 		$date = DateTime::createFromFormat( 'Ymd', $date );
 
-		return $date->format( 'm/d/Y' );
+		if ( $date ) {
+			return $date->format( 'm/d/Y' );
+		}
+
+		return false;
 	}
 
 	/**
@@ -228,7 +232,11 @@ class WSU_Timeline {
 
 		$date = DateTime::createFromFormat( 'm/d/Y', $date );
 
-		return $date->format( 'Ymd' );
+		if ( $date ) {
+			return $date->format( 'Ymd' );
+		}
+
+		return false;
 	}
 
 	/**

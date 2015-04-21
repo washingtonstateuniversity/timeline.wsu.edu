@@ -36,7 +36,11 @@ while( $timeline_query->have_posts() ) {
 		$item_century = absint( substr( $start_date, 0, 2 ) . '00' );
 		$item_decade = absint( substr( $start_date, 0, 3 ) . '0' );
 		$start_date = DateTime::createFromFormat( 'Ymd', $start_date );
-		$start_date = $start_date->format( 'j F Y' );
+		if ( $start_date ) {
+			$start_date = $start_date->format( 'j F Y' );
+		} else {
+			$start_date = 'Invalid Start Date';
+		}
 	} else {
 		$start_date = 'Invalid Start Date';
 	}

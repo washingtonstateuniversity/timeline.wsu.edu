@@ -391,5 +391,10 @@ class WSU_Timeline {
 		return $title_placeholder;
 	}
 }
-new WSU_Timeline();
+$wsu_timeline = new WSU_Timeline();
 endif;
+
+function wsu_timeline_slash_date_to_string( $date ) {
+	global $wsu_timeline;
+	return $wsu_timeline->slash_date_to_string( $date );
+}

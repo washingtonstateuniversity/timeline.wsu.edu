@@ -10,7 +10,6 @@ class WSU_Timeline_Theme {
 	public function __construct() {
 		add_action( 'spine_enqueue_styles', array( $this, 'enqueue_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		add_action( 'admin_init', array( $this, 'upgrade_db' ) );
 	}
 
 	public function get_timeline_items() {
@@ -35,17 +34,6 @@ class WSU_Timeline_Theme {
 	public function enqueue_scripts() {
 		wp_enqueue_script( 'wsu-home-typekit', 'https://use.typekit.net/roi0hte.js', array(), false, false );
 		wp_enqueue_script( 'wsu-timeline', get_stylesheet_directory_uri() . '/js/timeline.js', array( 'jquery' ), spine_get_script_version(), true );
-	}
-
-	public function upgrade_db() {
-		global $wpdb;
-
-		$db_version = absint( get_option( 'timeline-version', 0 ) );
-
-		if ( 1 > $db_version ) {
-			// post_id, meta_value
-			$dates = $wpdb->get_results( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE '%_ssl_disabled'" );
-		}
 	}
 }
 $wsu_timeline_theme = new WSU_Timeline_Theme();

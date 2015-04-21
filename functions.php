@@ -26,6 +26,9 @@ class WSU_Timeline_Theme {
 		$args = array(
 			'post_type' => 'wsu-timeline-point',
 			'posts_per_page' => 2000,
+			'order'     => 'ASC',
+			'meta_key' => '_wsu_tp_start_date',
+			'orderby'   => 'meta_value_num',
 		);
 		$query = new WP_Query( $args );
 		wp_reset_query();

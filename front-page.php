@@ -4,9 +4,12 @@ get_header();
 
 // Set a starting century and decade for the timeline.
 $timeline_century = 1800;
-$item_century = 1800;
-$timeline_decade = 1890;
-$item_decade = 1890;
+$item_century     = 1800;
+$timeline_decade  = 1890;
+$item_decade      = 1890;
+
+// Used to control the `one` and `two` column classes when alternating items.
+$flip_flop = 0;
 ?>
 <main>
 	<?php if ( have_posts() ) : while( have_posts() ) : the_post(); ?>
@@ -23,16 +26,10 @@ $item_decade = 1890;
 
 $timeline_query = wsu_timeline_get_items();
 
-$flip_flop = 0;
-
 while( $timeline_query->have_posts() ) {
 	$timeline_query->the_post();
 
-	if ( 0 === $flip_flop ) {
-		$column_class = 'one';
-	} else {
-		$column_class = 'two';
-	}
+	$column_class = ( 0 === $flip_flop ) ? 'one' : 'two';
 
 	$timeline_sub_headline = get_post_meta( get_the_ID(), '_wsu_tp_sub_headline', true );
 	$start_date            = get_post_meta( get_the_ID(), '_wsu_tp_start_date',   true );
@@ -40,8 +37,11 @@ while( $timeline_query->have_posts() ) {
 	$external_url          = get_post_meta( get_the_ID(), '_wsu_tp_external_url', true );
 
 	if ( $start_date && 8 === strlen( $start_date ) ) {
+		// Build the item's century using the first two year digits.
 		$item_century = absint( substr( $start_date, 0, 2 ) . '00' );
-		$item_decade = absint( substr( $start_date, 0, 3 ) . '0' );
+		// Build the item's decade using the first three year digits.
+		$item_decade  = absint( substr( $start_date, 0, 3 ) . '0' );
+
 		$start_date = DateTime::createFromFormat( 'Ymd', $start_date );
 		if ( $start_date ) {
 			$start_date = $start_date->format( 'j F Y' );
@@ -59,12 +59,9 @@ while( $timeline_query->have_posts() ) {
 		} else {
 			$end_date = '';
 		}
-
 	} else {
 		$end_date = ''; // We aren't too worried about an end date being available or valid.
 	}
-
-	$item_has_featured_image = spine_has_featured_image();
 
 	// If a decade is ending, close out the container. This should be closed out
 	// before any century container.
@@ -89,6 +86,8 @@ while( $timeline_query->have_posts() ) {
 		$timeline_decade = $item_decade;
 		echo '<div class="decade-' . $timeline_decade . '">';
 	}
+
+	$item_has_featured_image = spine_has_featured_image();
 	?>
 	<div class="column <?php echo $column_class; ?> timeline-item-container <?php if ( $item_has_featured_image ) : echo 'item-has-featured-image'; endif; ?>">
 		<div class="timeline-item-internal-wrapper">
@@ -121,13 +120,9 @@ while( $timeline_query->have_posts() ) {
 	</div>
 	<?php
 
-	if ( 0 === $flip_flop ) {
-		$flip_flop++;
-	} else {
-		$flip_flop = 0;
-	}
-}
+	$flip_flop = ( 0 === $flip_flop ) ? 1 : 0;
 
+} // end while timeline_query->have_posts()
 ?>
 			</div><!-- end decade -->
 		</div><!-- end century -->

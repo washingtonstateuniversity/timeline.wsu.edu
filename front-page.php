@@ -108,7 +108,7 @@ while( $timeline_query->have_posts() ) {
 
 		if ( isset( $timeline_decades[ $timeline_decade ] ) ) {
 			?>
-			<div class="decade-item" style="background-url(<?php echo esc_url( $timeline_decades[ $timeline_decade ]['image'] ); ?>);">
+			<div class="decade-item" style="background-image: url(<?php echo esc_url( $timeline_decades[ $timeline_decade ]['image'] ); ?>);">
 				<span class="decade-item-title"><?php echo esc_html( $timeline_decades[ $timeline_decade ]['title'] ); ?></span>
 				<div class="decade-item-content">
 					<?php echo $timeline_decades[ $timeline_decade ]['content']; ?>

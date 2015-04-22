@@ -10,11 +10,16 @@ class WSU_Timeline {
 	var $point_content_type_slug = 'wsu-timeline-point';
 
 	/**
+	 * @var string Slug used for the timeline decade content type.
+	 */
+	var $decade_content_type_slug = 'wsu-timeline-decade';
+
+	/**
 	 * Setup plugin.
 	 */
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 10 );
-		add_action( 'init', array( $this, 'register_content_type' ), 10 );
+		add_action( 'init', array( $this, 'register_content_types' ), 10 );
 		add_action( 'init', array( $this, 'setup_custom_taxonomies' ), 99 );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10 );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
@@ -38,9 +43,9 @@ class WSU_Timeline {
 	}
 
 	/**
-	 * Register the content type be used to track points on a timeline.
+	 * Register the content types used for displaying information on the timeline.
 	 */
-	public function register_content_type() {
+	public function register_content_types() {
 		$labels = array(
 			'name'               => __( 'Timeline Items', 'wsuwp_uc' ),
 			'singular_name'      => __( 'Timeline Item', 'wsuwp_uc' ),
@@ -76,6 +81,36 @@ class WSU_Timeline {
 			)
 		);
 		register_post_type( $this->point_content_type_slug, $args );
+
+		$labels = array(
+			'name'               => 'Timeline Decades',
+			'singular_name'      => 'Timeline Decade',
+			'all_items'          => 'All Timeline Decades',
+			'add_new_item'       => 'Add New Decade',
+			'edit_item'          => 'Edit Decade',
+			'new_item'           => 'New Decade',
+			'view_item'          => 'View Decade',
+			'search_item'        => 'Search Decades',
+			'not_found'          => 'No decades found',
+			'not_found_in_trash' => 'No decades found in trash',
+		);
+
+		$args = array(
+			'labels' => $labels,
+			'description' => 'Decades in the WSU Timeline',
+			'public' => false,
+			'show_ui' => true,
+			'hieararchical' => false,
+			'menu_icon' => 'dashicons-calendar',
+			'supports' => array(
+				'title',
+				'editor',
+				'revisions',
+				'thumbnail',
+			),
+			'has_archive' => false,
+		);
+		register_post_type( $this->decade_content_type_slug, $args );
 	}
 
 	/**
@@ -391,10 +426,80 @@ class WSU_Timeline {
 
 		return $title_placeholder;
 	}
+
+	/**
+	 * Retrieve a list of timeline items.
+	 *
+	 * @return WP_Query
+	 */
+	public function get_timeline_items() {
+		$args = array(
+			'post_type' => $this->point_content_type_slug,
+			'posts_per_page' => 2000,
+			'order'     => 'ASC',
+			'meta_key' => '_wsu_tp_start_date',
+			'orderby'   => 'meta_value_num',
+		);
+		$query = new WP_Query( $args );
+		wp_reset_query();
+		return $query;
+	}
+
+	/**
+	 * Retrieve a list of timeline decades.
+	 *
+	 * @return \WP_Query
+	 */
+	public function get_timeline_decades() {
+		$args = array(
+			'post_type' =>  $this->decade_content_type_slug,
+			'posts_per_page' => 20,
+			'order' => 'ASC',
+			'orderby' => 'title',
+		);
+		$query = new WP_Query( $args );
+		wp_reset_query();
+
+		return $query;
+	}
 }
 $wsu_timeline = new WSU_Timeline();
 
 function wsu_timeline_slash_date_to_string( $date ) {
 	global $wsu_timeline;
 	return $wsu_timeline->slash_date_to_string( $date );
+}
+
+/**
+ * Wrapper to retrieve a list of timeline items.
+ *
+ * @return WP_Query
+ */
+function wsu_timeline_get_items() {
+	global $wsu_timeline;
+	return $wsu_timeline->get_timeline_items();
+}
+
+/**
+ * Wrapper to retrieve a list of timeline decades.
+ * @return \WP_Query
+ */
+function wsu_timeline_get_decades() {
+	global $wsu_timeline;
+	$decades = $wsu_timeline->get_timeline_decades();
+
+	$return_decades = array();
+
+	while( $decades->have_posts() ) {
+		$decades->the_post();
+
+		$decade = absint( substr( get_the_title( get_the_ID() ), 0, 4 ) );
+		$return_decades[ $decade ] = array(
+			'title' => get_the_title(),
+			'content' => get_the_content(),
+			'image' => spine_get_featured_image_src(),
+		);
+	}
+
+	return $return_decades;
 }

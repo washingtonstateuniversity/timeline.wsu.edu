@@ -12,6 +12,9 @@ $item_month       = 189001;
 
 // Used to control the `one` and `two` column classes when alternating items.
 $flip_flop = 0;
+
+$timeline_decades = wsu_timeline_get_decades();
+
 ?>
 <main>
 	<?php if ( have_posts() ) : while( have_posts() ) : the_post(); ?>
@@ -25,6 +28,17 @@ $flip_flop = 0;
 		<div class="century century-1800">
 			<div class="decade decade-1890">
 <?php
+
+if ( isset( $timeline_decades[ $timeline_decade ] ) ) {
+	?>
+	<div class="decade-item" style="background-image: url(<?php echo esc_url( $timeline_decades[ $timeline_decade ]['image'] ); ?>);">
+		<span class="decade-item-title"><?php echo esc_html( $timeline_decades[ $timeline_decade ]['title'] ); ?></span>
+		<div class="decade-item-content">
+			<?php echo $timeline_decades[ $timeline_decade ]['content']; ?>
+		</div>
+	</div>
+<?php
+}
 
 $timeline_query = wsu_timeline_get_items();
 
@@ -91,8 +105,18 @@ while( $timeline_query->have_posts() ) {
 	if ( $item_decade >  $timeline_decade ) {
 		$timeline_decade = $item_decade;
 		echo '<div class="decade decade-' . $timeline_decade . '">';
-	}
 
+		if ( isset( $timeline_decades[ $timeline_decade ] ) ) {
+			?>
+			<div class="decade-item" style="background-url(<?php echo esc_url( $timeline_decades[ $timeline_decade ]['image'] ); ?>);">
+				<span class="decade-item-title"><?php echo esc_html( $timeline_decades[ $timeline_decade ]['title'] ); ?></span>
+				<div class="decade-item-content">
+					<?php echo $timeline_decades[ $timeline_decade ]['content']; ?>
+				</div>
+			</div>
+			<?php
+		}
+	}
 	$column_classes = array(
 		'column',
 		$column_class,

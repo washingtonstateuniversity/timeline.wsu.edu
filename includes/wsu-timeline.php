@@ -428,7 +428,7 @@ class WSU_Timeline {
 	}
 
 	/**
-	 * Retrieve a list timeline items.
+	 * Retrieve a list of timeline items.
 	 *
 	 * @return WP_Query
 	 */
@@ -442,6 +442,24 @@ class WSU_Timeline {
 		);
 		$query = new WP_Query( $args );
 		wp_reset_query();
+		return $query;
+	}
+
+	/**
+	 * Retrieve a list of timeline decades.
+	 *
+	 * @return \WP_Query
+	 */
+	public function get_timeline_decades() {
+		$args = array(
+			'post_type' =>  $this->decade_content_type_slug,
+			'posts_per_page' => 20,
+			'order' => 'ASC',
+			'orderby' => 'title',
+		);
+		$query = new WP_Query( $args );
+		wp_reset_query();
+
 		return $query;
 	}
 }
@@ -460,4 +478,28 @@ function wsu_timeline_slash_date_to_string( $date ) {
 function wsu_timeline_get_items() {
 	global $wsu_timeline;
 	return $wsu_timeline->get_timeline_items();
+}
+
+/**
+ * Wrapper to retrieve a list of timeline decades.
+ * @return \WP_Query
+ */
+function wsu_timeline_get_decades() {
+	global $wsu_timeline;
+	$decades = $wsu_timeline->get_timeline_decades();
+
+	$return_decades = array();
+
+	while( $decades->have_posts() ) {
+		$decades->the_post();
+
+		$decade = absint( substr( get_the_title( get_the_ID() ), 0, 4 ) );
+		$return_decades[ $decade ] = array(
+			'title' => get_the_title(),
+			'content' => get_the_content(),
+			'image' => spine_get_featured_image_src(),
+		);
+	}
+
+	return $return_decades;
 }

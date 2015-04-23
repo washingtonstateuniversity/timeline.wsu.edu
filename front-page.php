@@ -17,6 +17,16 @@ $timeline_decades = wsu_timeline_get_decades();
 
 ?>
 <main>
+	<section class="row single gutter pad-top main-feature-top full">
+		<div class="column one ">
+			<figure class="wsu-p-replaced">
+				<img class="alignnone" src="https://wsu.edu/wp-content/uploads/sites/625/2015/03/cougar-head-white.svg" alt="Washington State University Cougar Head" width="300" height="150">
+			</figure>
+			<h1 class="hero">Inspiring<br>
+				Washington</h1>
+			<h2>125 years, and counting.</h2>
+		</div>
+	</section>
 	<?php if ( have_posts() ) : while( have_posts() ) : the_post(); ?>
 	<section class="single row">
 		<div class="column one">

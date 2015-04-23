@@ -28,7 +28,7 @@ $timeline_decades = wsu_timeline_get_decades();
 		</div>
 	</section>
 	<?php if ( have_posts() ) : while( have_posts() ) : the_post(); ?>
-	<section class="single row">
+	<section class="row single">
 		<div class="column one">
 			<?php the_content(); ?>
 		</div>

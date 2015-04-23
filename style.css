@@ -53,6 +53,56 @@ header.main-header.wsu-home-navigation {
 	margin-top: 0;
 }
 
+/* SCRUB */
+.scrub {
+	height: 70px;
+	background: #eee;
+}
+
+.nav-fixed {
+	position: fixed;
+	top: 0;
+	z-index: 1;
+}
+
+.scrub-fixed {
+	position: fixed;
+	top: 0;
+	z-index: 1;
+}
+
+.scrub-progress-bar {
+	width: 100%;
+	height: 5px;
+	background-color: #981e32;
+}
+
+.fluid .row.scrub .column {
+	width: 95%;
+	height: 100%;
+	margin: 0 auto;
+	float: none;
+}
+
+.scrub-mark {
+	float:left;
+	width: 7.14%;
+	height: 100%;
+	position: relative;
+}
+
+.scrub-mark-text {
+	display:block;
+	transform: rotate( 90deg);
+	text-align: right;
+	/* width: 55px; */
+	position: absolute;
+	right: 0;
+	top: 10px;
+}
+
+
+
 @media screen and (max-width: 989px) {
 	.fluid .row.triptych .column.two.wsu-mega-nav-labels,
 	.home .fluid .row.triptych .column.two.wsu-mega-nav-labels,

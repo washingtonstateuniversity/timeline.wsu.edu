@@ -34,6 +34,24 @@ $timeline_decades = wsu_timeline_get_decades();
 		</div>
 	</section>
 	<?php endwhile; endif; ?>
+	<section class="row single scrub">
+		<div class="scrub-progress-bar"></div>
+		<div class="column one">
+			<div class="scrub-mark scrub-mark-1890"><span class="scrub-mark-text">– 1890</span></div>
+			<div class="scrub-mark scrub-mark-1900"><span class="scrub-mark-text">– 1900</span></div>
+			<div class="scrub-mark scrub-mark-1910"><span class="scrub-mark-text">– 1910</span></div>
+			<div class="scrub-mark scrub-mark-1920"><span class="scrub-mark-text">– 1920</span></div>
+			<div class="scrub-mark scrub-mark-1930"><span class="scrub-mark-text">– 1930</span></div>
+			<div class="scrub-mark scrub-mark-1940"><span class="scrub-mark-text">– 1940</span></div>
+			<div class="scrub-mark scrub-mark-1950"><span class="scrub-mark-text">– 1950</span></div>
+			<div class="scrub-mark scrub-mark-1960"><span class="scrub-mark-text">– 1960</span></div>
+			<div class="scrub-mark scrub-mark-1970"><span class="scrub-mark-text">– 1970</span></div>
+			<div class="scrub-mark scrub-mark-1980"><span class="scrub-mark-text">– 1980</span></div>
+			<div class="scrub-mark scrub-mark-1990"><span class="scrub-mark-text">– 1990</span></div>
+			<div class="scrub-mark scrub-mark-2000"><span class="scrub-mark-text">– 2000</span></div>
+			<div class="scrub-mark scrub-mark-2010"><span class="scrub-mark-text">– 2010</span></div>
+		</div>
+	</section>
 	<section class="halves row">
 		<div class="century century-1800">
 			<div class="decade decade-1890">

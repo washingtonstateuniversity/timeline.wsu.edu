@@ -183,8 +183,8 @@ while( $timeline_query->have_posts() ) {
 				<div class="timeline-item-footer-meta">
 					<span class="timeline-item-read-more">Read More</span>
 					<div class="timeline-item-social">
-						<a href="https://www.facebook.com/sharer/sharer.php?u=" class="tracked">Facebook</a>
-						<a href="https://twitter.com/intent/tweet?text=" target="_blank" class="tracked">Twitter</a>
+						<a href="https://www.facebook.com/sharer/sharer.php?u=" class="facebook tracked">Facebook</a>
+						<a href="https://twitter.com/intent/tweet?text=" target="_blank" class="twitter tracked">Twitter</a>
 					</div>
 				</div>
 			</div>

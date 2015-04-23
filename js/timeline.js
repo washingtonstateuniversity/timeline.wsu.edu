@@ -28,14 +28,6 @@ try{Typekit.load();}catch(e){}
 				$scrub.removeClass('scrub-fixed');
 			}
 
-			var timeline_width = ( scroll_top / timeline_size ) * 100;
-			timeline_width = timeline_width.toFixed(4) / 1;
-
-			if ( timeline_width !== last_timeline_width ) {
-				last_timeline_width = timeline_width;
-				jQuery('.scrub-progress-bar').css('width', timeline_width + '%' );
-			}
-
 			/**
 			 * - If the scrub area has hit the top of the scroll
 			 * - And we're scrolling up
@@ -54,6 +46,17 @@ try{Typekit.load();}catch(e){}
 
 			last_scroll_top = scroll_top;
 
+			/**
+			 * Draw a progress bar based on the total height of the document. This will
+			 * be refactored to watch the actual progression of time.
+			 */
+			var timeline_width = ( scroll_top / timeline_size ) * 100;
+			timeline_width = timeline_width.toFixed(4) / 1;
+
+			if ( timeline_width !== last_timeline_width ) {
+				last_timeline_width = timeline_width;
+				jQuery('.scrub-progress-bar').css('width', timeline_width + '%' );
+			}
 		});
 		$(document).trigger('scroll');
 	});

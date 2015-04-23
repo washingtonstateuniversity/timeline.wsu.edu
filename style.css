@@ -59,6 +59,12 @@ header.main-header.wsu-home-navigation {
 	background: #eee;
 }
 
+.nav-fixed {
+	position: fixed;
+	top: 0;
+	z-index: 1;
+}
+
 .scrub-fixed {
 	position: fixed;
 	top: 0;

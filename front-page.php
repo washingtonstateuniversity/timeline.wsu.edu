@@ -35,6 +35,7 @@ $timeline_decades = wsu_timeline_get_decades();
 	</section>
 	<?php endwhile; endif; ?>
 	<section class="row single scrub">
+		<div class="scrub-progress-bar"></div>
 		<div class="column one">
 			<div class="scrub-mark scrub-mark-1890"><span class="scrub-mark-text">– 1890</span></div>
 			<div class="scrub-mark scrub-mark-1900"><span class="scrub-mark-text">– 1900</span></div>

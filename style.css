@@ -57,14 +57,18 @@ header.main-header.wsu-home-navigation {
 .scrub {
 	height: 70px;
 	background: #eee;
-	padding-left: 3.57%;
-	padding-right: 3.57%
 }
 
 .scrub-fixed {
 	position: fixed;
 	top: 0;
 	z-index: 1;
+}
+
+.scrub-progress-bar {
+	width: 100%;
+	height: 5px;
+	background-color: #981e32;
 }
 
 .fluid .row.scrub .column {

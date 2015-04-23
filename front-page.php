@@ -177,10 +177,21 @@ while( $timeline_query->have_posts() ) {
 					echo $matches[0];
 					$content = str_replace( $matches[0], '', $content );
 				}
+
+				$show_more = true;
+				$content = trim( $content );
+				if ( empty( $content ) && false === $item_has_featured_image ) {
+					$show_more = false;
+				}
+
+				if ( $show_more ) {
+					?>
+					<div class="timeline-content-expanded">
+						<?php echo $content; ?>
+					</div>
+					<?php
+				}
 				?>
-				<div class="timeline-content-expanded">
-					<?php echo $content; ?>
-				</div>
 			</div>
 			<div class="timeline-item-footer">
 				<?php
@@ -191,7 +202,7 @@ while( $timeline_query->have_posts() ) {
 				}
 				?>
 				<div class="timeline-item-footer-meta">
-					<span class="timeline-item-read-more">More</span>
+					<?php if ( $show_more ) : ?><span class="timeline-item-read-more">More</span><?php endif; ?>
 					<div class="timeline-item-social">
 						<a href="https://www.facebook.com/sharer/sharer.php?u=" class="facebook tracked">Facebook</a>
 						<a href="https://twitter.com/intent/tweet?text=" target="_blank" class="twitter tracked">Twitter</a>

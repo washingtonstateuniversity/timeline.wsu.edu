@@ -4,6 +4,7 @@ try{Typekit.load();}catch(e){}
 
 	$(document).ready(function(){
 		var $scrub = $('.scrub'),
+			$main_timeline = $('.timeline-container'),
 			scrub_top = $scrub.offset().top,
 			doc_height = $(document).height(),
 			timeline_size = doc_height - scrub_top,
@@ -38,10 +39,12 @@ try{Typekit.load();}catch(e){}
 				$home_nav.addClass('nav-fixed');
 				nav_is_fixed = true;
 				$scrub.css('top', home_nav_height + 'px' );
+				$main_timeline.css('margin-top', home_nav_height + 'px' );
 			} else if ( ( scrub_top - scroll_top ) <= 0 && scroll_top > last_scroll_top && $home_nav.hasClass('nav-fixed') ) {
 				$home_nav.removeClass('nav-fixed');
 				nav_is_fixed = false;
 				$scrub.css('top', 0 );
+				$main_timeline.css('margin-top',0);
 			}
 
 			last_scroll_top = scroll_top;
@@ -59,5 +62,43 @@ try{Typekit.load();}catch(e){}
 			}
 		});
 		$(document).trigger('scroll');
+
+		$scrub.on('click', '.scrub-mark', function(evt){
+
+			var $scrub_mark = $(evt.target);
+
+			if ( ! $scrub_mark.is('.scrub-mark') ) {
+				$scrub_mark = $scrub_mark.parents('.scrub-mark');
+			}
+
+			var scrub_decade = $scrub_mark.data('decade');
+
+			var closest_year = Math.round(((evt.pageX - $scrub_mark.offset().left) / $scrub_mark.width()) * 10) + scrub_decade;
+
+			$('.timeline-item-container').show();
+			$('.decade').show();
+			$('.century').show();
+
+			var $closest_year_element = $('.item-year-' + closest_year);
+
+			while ( 0 === $closest_year_element.length ) {
+				closest_year++;
+				$closest_year_element = $('.item-year-' + closest_year);
+			}
+
+			var $first_year = $closest_year_element.first();
+
+			var $decade_items = $first_year.prevAll('.timeline-item-container');
+			var $decades = $first_year.parent('.decade').prevAll('.decade')
+			var $centuries = $first_year.parent('.decade').parent('.century').prevAll('.century');
+
+			$centuries.hide();
+			$decades.hide();
+			$decade_items.hide();
+
+			console.log(closest_year, scrub_decade);
+		});
+
+		//$('.item-year-1917').first().prevAll('.timeline-item-container').hide().parent('.decade').prevAll('.decade').hide().parent('.century').prevAll('.century').hide();
 	});
 }(jQuery));

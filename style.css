@@ -86,19 +86,19 @@ header.main-header.wsu-home-navigation {
 
 .scrub-mark {
 	float:left;
-	width: 7.14%;
+	width: 7.69%;
 	height: 100%;
 	position: relative;
 }
 
 .scrub-mark-text {
-	display:block;
-	transform: rotate( 90deg);
+	display: block;
+	transform: rotate(90deg);
 	text-align: right;
-	/* width: 55px; */
 	position: absolute;
-	right: 0;
+	left: -14px;
 	top: 10px;
+	font-size: 14px;
 }
 
 

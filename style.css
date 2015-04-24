@@ -101,7 +101,14 @@ header.main-header.wsu-home-navigation {
 	font-size: 14px;
 }
 
-
+.scrub-shade-overlay {
+	width: 10px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: rgba(0,0,0,.5);
+	height: 100%;
+}
 
 @media screen and (max-width: 989px) {
 	.fluid .row.triptych .column.two.wsu-mega-nav-labels,

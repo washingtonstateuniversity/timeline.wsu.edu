@@ -89,13 +89,14 @@ try{Typekit.load();}catch(e){}
 			var $first_year = $closest_year_element.first();
 
 			var $decade_items = $first_year.prevAll('.timeline-item-container');
-			var $decades = $first_year.parent('.decade').prevAll('.decade')
+			var $decades = $first_year.parent('.decade').prevAll('.decade');
 			var $centuries = $first_year.parent('.decade').parent('.century').prevAll('.century');
 
 			$centuries.hide();
 			$decades.hide();
 			$decade_items.hide();
 
+			$('.scrub-shade-overlay').css('width',evt.pageX + 'px');
 			console.log(closest_year, scrub_decade);
 		});
 

@@ -62,13 +62,15 @@ header.main-header.wsu-home-navigation {
 .nav-fixed {
 	position: fixed;
 	top: 0;
-	z-index: 1;
+	z-index: 9;
+	transition: top .3s ease-in-out;
 }
 
 .scrub-fixed {
 	position: fixed;
 	top: 0;
 	z-index: 1;
+	transition: top .3s ease-in-out;
 }
 
 .scrub-progress-bar {

@@ -62,13 +62,15 @@ header.main-header.wsu-home-navigation {
 .nav-fixed {
 	position: fixed;
 	top: 0;
-	z-index: 1;
+	z-index: 9;
+	transition: top .3s ease-in-out;
 }
 
 .scrub-fixed {
 	position: fixed;
 	top: 0;
 	z-index: 1;
+	transition: top .3s ease-in-out;
 }
 
 .scrub-progress-bar {
@@ -86,22 +88,29 @@ header.main-header.wsu-home-navigation {
 
 .scrub-mark {
 	float:left;
-	width: 7.14%;
+	width: 7.69%;
 	height: 100%;
 	position: relative;
 }
 
 .scrub-mark-text {
-	display:block;
-	transform: rotate( 90deg);
+	display: block;
+	transform: rotate(90deg);
 	text-align: right;
-	/* width: 55px; */
 	position: absolute;
-	right: 0;
+	left: -14px;
 	top: 10px;
+	font-size: 14px;
 }
 
-
+.scrub-shade-overlay {
+	width: 10px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: rgba(0,0,0,.5);
+	height: 100%;
+}
 
 @media screen and (max-width: 989px) {
 	.fluid .row.triptych .column.two.wsu-mega-nav-labels,

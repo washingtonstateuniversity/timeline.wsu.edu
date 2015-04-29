@@ -29,6 +29,16 @@ var wsuTimeline = wsuTimeline || {};
 			'click .timeline-item-internal-wrapper' : 'clickTimelineItem'
 		},
 
+		/**
+		 * Handle click events on individual timeline items.
+		 *
+		 * - Items should expand and retract depending on their current state.
+		 * - Read more text should swap between "More" and "Close"
+		 * - We should avoid clicks on the actual content of an item.
+		 * - We should avoid clicks on social icons.
+		 *
+		 * @param evt
+		 */
 		clickTimelineItem: function(evt) {
 			var $target = $(evt.target);
 

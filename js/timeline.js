@@ -189,18 +189,6 @@ var wsuTimeline = wsuTimeline || {};
 
 			// Collect the last scroll point so that we can compare it next time.
 			last_scroll_top = scroll_top;
-
-			/**
-			 * Draw a progress bar based on the total height of the document. This will
-			 * be refactored to watch the actual progression of time.
-			 */
-			var timeline_width = ( scroll_top / timeline_size ) * 100;
-			timeline_width = timeline_width.toFixed(4) / 1;
-
-			if ( timeline_width !== last_timeline_width ) {
-				last_timeline_width = timeline_width;
-				jQuery('.scrub-progress-bar').css('width', timeline_width + '%' );
-			}
 		},
 
 		handleScrub: function(evt){
@@ -214,10 +202,6 @@ var wsuTimeline = wsuTimeline || {};
 
 			var closest_year = Math.round(((evt.pageX - $scrub_mark.offset().left) / $scrub_mark.width()) * 10) + scrub_decade;
 
-			$('.timeline-item-container').show();
-			$('.decade').show();
-			$('.century').show();
-
 			var $closest_year_element = $('.item-year-' + closest_year);
 
 			while ( 0 === $closest_year_element.length ) {
@@ -225,18 +209,11 @@ var wsuTimeline = wsuTimeline || {};
 				$closest_year_element = $('.item-year-' + closest_year);
 			}
 
-			var $first_year = $closest_year_element.first();
+			var $scroll_top = $closest_year_element.first().offset().top;
 
-			var $decade_items = $first_year.prevAll('.timeline-item-container');
-			var $decades = $first_year.parent('.decade').prevAll('.decade');
-			var $centuries = $first_year.parent('.decade').parent('.century').prevAll('.century');
-
-			$centuries.hide();
-			$decades.hide();
-			$decade_items.hide();
-
-			$('.scrub-shade-overlay').css('width',evt.pageX + 'px');
-			console.log(closest_year, scrub_decade);
+			$(window).scrollTop($scroll_top);
+			$('.scrub-shade-overlay').css('left',evt.pageX + 'px');
+			$('.scrub-progress-bar').css('width',evt.pageX + 'px');
 		}
 
 	});

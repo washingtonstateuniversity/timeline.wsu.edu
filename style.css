@@ -112,6 +112,14 @@ header.main-header.wsu-home-navigation {
 	height: 100%;
 }
 
+.timeline-content-expanded {
+	display: none;
+}
+
+.open .timeline-content-expanded {
+	display: block;
+}
+
 @media screen and (max-width: 989px) {
 	.fluid .row.triptych .column.two.wsu-mega-nav-labels,
 	.home .fluid .row.triptych .column.two.wsu-mega-nav-labels,

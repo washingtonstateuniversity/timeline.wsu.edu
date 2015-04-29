@@ -22,6 +22,49 @@ var wsuTimeline = wsuTimeline || {};
 		last_scroll_top = $(document).scrollTop(),
 		home_nav_height = $home_nav.height();
 
+	wsuTimeline.containerView = Backbone.View.extend({
+		el: '.timeline-container',
+
+		events: {
+			'click .timeline-item-internal-wrapper' : 'clickTimelineItem'
+		},
+
+		/**
+		 * Handle click events on individual timeline items.
+		 *
+		 * - Items should expand and retract depending on their current state.
+		 * - Read more text should swap between "More" and "Close"
+		 * - We should avoid clicks on the actual content of an item.
+		 * - We should avoid clicks on social icons.
+		 *
+		 * @param evt
+		 */
+		clickTimelineItem: function(evt) {
+			var $target = $(evt.target);
+
+			// Avoid clicks on the content itself. Prevents confusion when copying text.
+			if ( $target.is('.timeline-content') || $target.parents('.timeline-content').length ) {
+				return;
+			}
+
+			// Avoid clicks on the social sharing icons.
+			if ( $target.is('.timeline-item-social') || $target.parents('.timeline-item-social').length ) {
+				return;
+			}
+
+			var $target_parent = $target.parents('.timeline-item-container');
+
+			if ( $target_parent.hasClass('open') ) {
+				$target_parent.removeClass('open');
+				$target_parent.find('.timeline-item-read-more').html('More');
+			} else {
+				$target_parent.addClass('open');
+				$target_parent.find('.timeline-item-read-more').html('Close');
+			}
+		}
+
+	});
+
 	wsuTimeline.appView = Backbone.View.extend({
 		/**
 		 * The context in which events are bound.
@@ -193,5 +236,6 @@ var wsuTimeline = wsuTimeline || {};
 
 	$(document).ready(function(){
 		window.wsuTimeline.app = new wsuTimeline.appView();
+		window.wsuTimeline.container = new wsuTimeline.containerView();
 	});
 })(window, Backbone, jQuery, _, wsuTimeline);

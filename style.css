@@ -104,11 +104,11 @@ header.main-header.wsu-home-navigation {
 }
 
 .scrub-shade-overlay {
-	width: 10px;
+	width: 20px;
 	position: absolute;
 	top: 0;
 	left: 0;
-	background: rgba(0,0,0,.5);
+	background: rgba(0,0,0,.3);
 	height: 100%;
 }
 

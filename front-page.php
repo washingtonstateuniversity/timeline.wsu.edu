@@ -204,6 +204,8 @@ while( $timeline_query->have_posts() ) {
 				}
 
 				if ( $show_more ) {
+					// Use a data attribute to avoid loading all images until the extra content is expanded.
+					$content = preg_replace('|<img([^>]*) src="([^"/]*/?[^".]*\.[^"]*)"([^>]*)>|', '<img$1 src="" data-src="$2"$3>', $content);
 					?>
 					<div class="timeline-content-expanded">
 						<?php echo $content; ?>

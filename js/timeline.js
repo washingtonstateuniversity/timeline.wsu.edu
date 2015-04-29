@@ -58,6 +58,13 @@ var wsuTimeline = wsuTimeline || {};
 				$target_parent.removeClass('open');
 				$target_parent.find('.timeline-item-read-more').html('More');
 			} else {
+				// Loop through each newly expanded image and assign it's data-src as src.
+				$target_parent.find('.timeline-content-expanded img').each(function(){
+					var $current = $(this);
+					if ( '' === $current.attr('src') ) {
+						$current.attr('src', $current.data('src'));
+					}
+				});
 				$target_parent.addClass('open');
 				$target_parent.find('.timeline-item-read-more').html('Close');
 			}

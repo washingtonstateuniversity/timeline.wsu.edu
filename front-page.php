@@ -137,7 +137,8 @@ while( $timeline_query->have_posts() ) {
 
 		if ( isset( $timeline_decades[ $timeline_decade ] ) ) {
 			?>
-			<div class="decade-item" style="background-image: url(<?php echo esc_url( $timeline_decades[ $timeline_decade ]['image'] ); ?>);">
+			<div class="decade-item">
+				<div class=“decade-image" style="background-image: url(<?php echo esc_url( $timeline_decades[ $timeline_decade ]['image'] ); ?>);">
 				<span class="decade-item-title"><?php echo esc_html( $timeline_decades[ $timeline_decade ]['title'] ); ?></span>
 				<div class="decade-item-content">
 					<?php echo $timeline_decades[ $timeline_decade ]['content']; ?>
@@ -159,8 +160,10 @@ while( $timeline_query->have_posts() ) {
 	if ( $item_has_featured_image ) {
 		$column_classes[] = 'item-has-featured-image';
 	}
+
+	$item_id = 'timeline-' . get_the_ID();
 	?>
-	<div class="<?php echo implode( ' ', $column_classes ); ?>">
+	<div id="<?php echo $item_id; ?>" class="<?php echo implode( ' ', $column_classes ); ?>">
 		<?php if ( $item_has_featured_image ) : ?>
 		<div class="timeline-item-feature-wrapper">
 			<figure class="timeline-item-feature">

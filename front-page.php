@@ -160,8 +160,10 @@ while( $timeline_query->have_posts() ) {
 	if ( $item_has_featured_image ) {
 		$column_classes[] = 'item-has-featured-image';
 	}
+
+	$item_id = 'timeline-' . get_the_ID();
 	?>
-	<div class="<?php echo implode( ' ', $column_classes ); ?>">
+	<div id="<?php echo $item_id; ?>" class="<?php echo implode( ' ', $column_classes ); ?>">
 		<?php if ( $item_has_featured_image ) : ?>
 		<div class="timeline-item-feature-wrapper">
 			<figure class="timeline-item-feature">

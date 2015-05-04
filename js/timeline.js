@@ -18,9 +18,30 @@ var wsuTimeline = wsuTimeline || {};
 		$home_nav = $('.wsu-home-navigation'),
 		scrub_top = $scrub.offset().top,
 		doc_height = $(document).height(),
+		doc_width = $(document).width(),
 		timeline_size = doc_height - scrub_top,
 		last_scroll_top = $(document).scrollTop(),
-		home_nav_height = $home_nav.height();
+		home_nav_height = $home_nav.height(),
+		decade_markers = {
+			1890 : 0,
+			1900 : 0,
+			1910 : 0,
+			1920 : 0,
+			1930 : 0,
+			1940 : 0,
+			1950 : 0,
+			1960 : 0,
+			1970 : 0,
+			1980 : 0,
+			1990 : 0,
+			2000 : 0,
+			2010 : 0
+		},
+		current_scroll_top = 0,
+		current_decade_key = 0,
+		current_decade_start = 0,
+		current_decade_end = 0,
+		current_decade_perc = 0;
 
 	wsuTimeline.containerView = Backbone.View.extend({
 		el: '.timeline-container',
@@ -78,7 +99,77 @@ var wsuTimeline = wsuTimeline || {};
 		 */
 		el: '.scrub',
 
+		setup_decade_position: function() {
+			var capture_next = false;
+
+			current_scroll_top = $(document).scrollTop();
+			for (var k in decade_markers){
+				if (decade_markers.hasOwnProperty(k) && 0 !== decade_markers[k]) {
+					if ( capture_next ) {
+						current_decade_end = decade_markers[k];
+						capture_next = false;
+					}
+
+					if ( current_scroll_top >= decade_markers[k] ) {
+						current_decade_key = k;
+						current_decade_start = decade_markers[k];
+						capture_next = true;
+					}
+				}
+			}
+
+			var current_decade_total = current_decade_end - current_decade_start;
+			var current_decade_marker = current_scroll_top - current_decade_start;
+
+			current_decade_perc = ( current_decade_marker / current_decade_total );
+		},
+
+		setup_scrub_position: function() {
+			var count_total = 0,
+				count_key = 0,
+				count_position = false;
+
+			for(var k in decade_markers) {
+				if ( decade_markers.hasOwnProperty(k) ) {
+					count_total++;
+					if ( count_position === false ) {
+						if ( k === current_decade_key ) {
+							count_position = true;
+						} else {
+							count_key++;
+						}
+					}
+				}
+			}
+
+			var decade_minor = ( doc_width * .95 ) / count_total;
+
+			var decade_full = decade_minor * count_key;
+
+			var decade_partial = decade_minor * current_decade_perc;
+
+			var scrub_scroll = Math.floor( ( doc_width * 0.025 ) + decade_full + decade_partial );
+
+			$('.scrub-progress-bar').width(scrub_scroll);
+			$('.scrub-shade-overlay').css('left', scrub_scroll + 'px');
+		},
+
+		setup_decades: function() {
+			var self = this;
+			for (var k in decade_markers){
+				if (decade_markers.hasOwnProperty(k)) {
+					var offset = $('.decade-' + k).offset();
+
+					if ( undefined !== offset ) {
+						decade_markers[k] = Math.ceil(offset.top);
+					}
+				}
+			}
+			self.setup_decade_position();
+		},
+
 		initialize: function() {
+			this.setup_decades();
 			$(document).scroll(this.scrollTimeline);
 			$(document).trigger('scroll');
 			$(document).on('resize',this.refreshDefaults);
@@ -189,6 +280,11 @@ var wsuTimeline = wsuTimeline || {};
 
 			// Collect the last scroll point so that we can compare it next time.
 			last_scroll_top = scroll_top;
+
+			if ( undefined !== wsuTimeline.app ) {
+				wsuTimeline.app.setup_decade_position();
+				wsuTimeline.app.setup_scrub_position();
+			}
 		},
 
 		handleScrub: function(evt){
@@ -212,8 +308,6 @@ var wsuTimeline = wsuTimeline || {};
 			var $scroll_top = $closest_year_element.first().offset().top;
 
 			$(window).scrollTop($scroll_top);
-			$('.scrub-shade-overlay').css('left',evt.pageX + 'px');
-			$('.scrub-progress-bar').css('width',evt.pageX + 'px');
 		}
 
 	});

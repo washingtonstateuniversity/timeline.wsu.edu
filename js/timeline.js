@@ -14,13 +14,11 @@ var wsuTimeline = wsuTimeline || {};
 		nav_is_fixed   = false,
 		nav_on_display = false,
 		$scrub         = $('.scrub'),
-		last_timeline_width = 0,
 		$home_nav = $('.wsu-home-navigation'),
 		scrub_top = $scrub.offset().top,
 		doc_height = $(document).height(),
 		doc_width = $(document).width(),
 		timeline_size = doc_height - scrub_top,
-		last_scroll_top = $(document).scrollTop(),
 		home_nav_height = $home_nav.height(),
 		decade_markers = {
 			1890 : 0,
@@ -37,7 +35,7 @@ var wsuTimeline = wsuTimeline || {};
 			2000 : 0,
 			2010 : 0
 		},
-		current_scroll_top = 0,
+		current_scroll_top = $(document).scrollTop(),
 		current_decade_key = 0,
 		current_decade_start = 0,
 		current_decade_end = 0,
@@ -188,7 +186,7 @@ var wsuTimeline = wsuTimeline || {};
 			scrub_top = $scrub.offset().top;
 			doc_height = $(document).height();
 			timeline_size = doc_height - scrub_top;
-			last_scroll_top = $(document).scrollTop();
+			current_scroll_top = $(document).scrollTop();
 			home_nav_height = $home_nav.height();
 			$(document).trigger('scroll');
 		},
@@ -266,12 +264,12 @@ var wsuTimeline = wsuTimeline || {};
 			 * If the navigation is fixed, displayed, and we know that we're starting to scroll
 			 * back down the page, hide the navigation from view.
 			 */
-			if ( nav_is_fixed && ! nav_on_display && ( last_scroll_top > scroll_top ) ) {
+			if ( nav_is_fixed && ! nav_on_display && ( current_scroll_top > scroll_top ) ) {
 				$home_nav.css('top',0);
 				$scrub.css('top', home_nav_height + 'px');
 
 				nav_on_display = true;
-			} else if ( scrub_is_fixed && nav_is_fixed && nav_on_display && ( last_scroll_top < scroll_top ) ) {
+			} else if ( scrub_is_fixed && nav_is_fixed && nav_on_display && ( current_scroll_top < scroll_top ) ) {
 				$home_nav.css('top','-' + home_nav_height + 'px');
 				$scrub.css('top',0);
 
@@ -279,7 +277,7 @@ var wsuTimeline = wsuTimeline || {};
 			}
 
 			// Collect the last scroll point so that we can compare it next time.
-			last_scroll_top = scroll_top;
+			current_scroll_top = scroll_top;
 
 			if ( undefined !== wsuTimeline.app ) {
 				wsuTimeline.app.setup_decade_position();

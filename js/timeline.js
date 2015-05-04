@@ -168,6 +168,8 @@ var wsuTimeline = wsuTimeline || {};
 
 		initialize: function() {
 			this.setup_decades();
+			this.setup_decade_position();
+			this.setup_scrub_position();
 			$(document).scroll(this.scrollTimeline);
 			$(document).trigger('scroll');
 			$(document).on('resize',this.refreshDefaults);

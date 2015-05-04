@@ -10,17 +10,21 @@ var wsuTimeline = wsuTimeline || {};
 	 *
 	 * @type {boolean}
 	 */
-	var scrub_is_fixed = false,
-		nav_is_fixed   = false,
-		nav_on_display = false,
-		$scrub         = $('.scrub'),
-		$home_nav = $('.wsu-home-navigation'),
-		scrub_top = $scrub.offset().top,
-		doc_height = $(document).height(),
-		doc_width = $(document).width(),
-		timeline_size = doc_height - scrub_top,
-		home_nav_height = $home_nav.height(),
-		decade_markers = {
+	var scrub_is_fixed       = false,
+		nav_is_fixed         = false,
+		nav_on_display       = false,
+		$scrub               = $('.scrub'),
+		$scrub_column        = $scrub.find('.column'),
+		$scrub_progress_bar  = $('.scrub-progress-bar'),
+		$scrub_shade_overlay = $('.scrub-shade-overlay'),
+		$home_nav            = $('.wsu-home-navigation'),
+		doc_height           = $(document).height(),
+		scrub_top            = $scrub.offset().top,
+		scrub_width          = $scrub_column.width(),
+		scrub_left           = $scrub_column.offset().left,
+		timeline_size        = doc_height - scrub_top,
+		home_nav_height      = $home_nav.height(),
+		decade_markers       = {
 			1890 : 0,
 			1900 : 0,
 			1910 : 0,
@@ -35,11 +39,11 @@ var wsuTimeline = wsuTimeline || {};
 			2000 : 0,
 			2010 : 0
 		},
-		current_scroll_top = $(document).scrollTop(),
-		current_decade_key = 0,
+		current_scroll_top   = 0,
+		current_decade_key   = 0,
 		current_decade_start = 0,
-		current_decade_end = 0,
-		current_decade_perc = 0;
+		current_decade_end   = 0,
+		current_decade_perc  = 0;
 
 	wsuTimeline.containerView = Backbone.View.extend({
 		el: '.timeline-container',
@@ -140,16 +144,16 @@ var wsuTimeline = wsuTimeline || {};
 				}
 			}
 
-			var decade_minor = ( doc_width * .95 ) / count_total;
+			var decade_minor = scrub_width / count_total;
 
 			var decade_full = decade_minor * count_key;
 
 			var decade_partial = decade_minor * current_decade_perc;
 
-			var scrub_scroll = Math.floor( ( doc_width * 0.025 ) + decade_full + decade_partial );
+			var scrub_scroll = Math.floor( scrub_left + decade_full + decade_partial );
 
-			$('.scrub-progress-bar').width(scrub_scroll);
-			$('.scrub-shade-overlay').css('left', scrub_scroll + 'px');
+			$scrub_progress_bar.width(scrub_scroll);
+			$scrub_shade_overlay.css('left', scrub_scroll + 'px');
 		},
 
 		setup_decades: function() {
@@ -172,7 +176,7 @@ var wsuTimeline = wsuTimeline || {};
 			this.setup_scrub_position();
 			$(document).scroll(this.scrollTimeline);
 			$(document).trigger('scroll');
-			$(document).on('resize',this.refreshDefaults);
+			$(window).on('resize',this.refreshDefaults);
 		},
 
 		// Setup the events used in the overall application view.
@@ -185,12 +189,21 @@ var wsuTimeline = wsuTimeline || {};
 		 * the current document after a resize event has fired.
 		 */
 		refreshDefaults: function() {
-			scrub_top = $scrub.offset().top;
-			doc_height = $(document).height();
-			timeline_size = doc_height - scrub_top;
+			$scrub.css('position','relative');
+			scrub_top          = $scrub.offset().top;
+			$scrub.css('position','fixed');
+			scrub_width        = $scrub_column.width();
+			scrub_left         = $scrub_column.offset().left;
+			doc_height         = $(document).height();
+			timeline_size      = doc_height - scrub_top;
 			current_scroll_top = $(document).scrollTop();
-			home_nav_height = $home_nav.height();
-			$(document).trigger('scroll');
+			home_nav_height    = $home_nav.height();
+
+			if ( undefined !== wsuTimeline.app ) {
+				wsuTimeline.app.setup_decades();
+				wsuTimeline.app.setup_decade_position();
+				wsuTimeline.app.setup_scrub_position();
+			}
 		},
 
 		/**

@@ -313,8 +313,15 @@ var wsuTimeline = wsuTimeline || {};
 
 			var $closest_year_element = $('.item-year-' + closest_year);
 
+			var x = 0;
 			while ( 0 === $closest_year_element.length ) {
-				closest_year++;
+				// Try going up a year a few times before going backward.
+				if ( x <= 4 ) {
+					closest_year++;
+					x++;
+				} else {
+					closest_year--;
+				}
 				$closest_year_element = $('.item-year-' + closest_year);
 			}
 

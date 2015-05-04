@@ -49,7 +49,7 @@ var wsuTimeline = wsuTimeline || {};
 		el: '.timeline-container',
 
 		events: {
-			'click .timeline-item-internal-wrapper' : 'clickTimelineItem'
+			'click .ti-inside-wrap' : 'clickTimelineItem'
 		},
 
 		/**
@@ -66,30 +66,30 @@ var wsuTimeline = wsuTimeline || {};
 			var $target = $(evt.target);
 
 			// Avoid clicks on the content itself. Prevents confusion when copying text.
-			if ( $target.is('.timeline-content') || $target.parents('.timeline-content').length ) {
+			if ( $target.is('.t-content') || $target.parents('.t-content').length ) {
 				return;
 			}
 
 			// Avoid clicks on the social sharing icons.
-			if ( $target.is('.timeline-item-social') || $target.parents('.timeline-item-social').length ) {
+			if ( $target.is('.ti-social') || $target.parents('.ti-social').length ) {
 				return;
 			}
 
-			var $target_parent = $target.parents('.timeline-item-container');
+			var $target_parent = $target.parents('.ti-container');
 
 			if ( $target_parent.hasClass('open') ) {
 				$target_parent.removeClass('open');
-				$target_parent.find('.timeline-item-read-more').html('More');
+				$target_parent.find('.ti-read-more').html('More');
 			} else {
 				// Loop through each newly expanded image and assign it's data-src as src.
-				$target_parent.find('.timeline-content-expanded img').each(function(){
+				$target_parent.find('.t-content-expanded img').each(function(){
 					var $current = $(this);
 					if ( '' === $current.attr('src') ) {
 						$current.attr('src', $current.data('src'));
 					}
 				});
 				$target_parent.addClass('open');
-				$target_parent.find('.timeline-item-read-more').html('Close');
+				$target_parent.find('.ti-read-more').html('Close');
 			}
 		}
 

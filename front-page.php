@@ -151,7 +151,7 @@ while( $timeline_query->have_posts() ) {
 	$column_classes = array(
 		'column',
 		$column_class,
-		'timeline-item-container',
+		'ti-container',
 		'item-year-' . $item_year,
 		'item-month-' . $item_month,
 	);
@@ -162,27 +162,27 @@ while( $timeline_query->have_posts() ) {
 		$column_classes[] = 'item-has-featured-image';
 	}
 
-	$item_id = 'timeline-' . get_the_ID();
+	$item_id = 'ti-' . get_the_ID();
 	?>
 	<div id="<?php echo $item_id; ?>" class="<?php echo implode( ' ', $column_classes ); ?>">
 		<?php if ( $item_has_featured_image ) : ?>
-		<div class="timeline-item-feature-wrapper">
-			<figure class="timeline-item-feature">
+		<div class="ti-feature-wrap">
+			<figure class="ti-feature">
 				<img src="<?php echo esc_url( spine_get_featured_image_src( 'spine-xlarge_size' ) ); ?>">
 			</figure>
 		</div>
 		<?php endif; ?>
-		<div class="timeline-item-internal-wrapper">
+		<div class="ti-inside-wrap">
 			<header>
 				<h2><?php the_title(); ?></h2>
 				<?php if ( ! empty( $timeline_sub_headline ) ) : ?><h3><?php echo $timeline_sub_headline; ?></h3><?php endif; ?>
 			</header>
-			<div class="timeline-item-date-wrapper">
+			<div class="ti-date-wrap">
 				<span class="start-date"><?php echo esc_html( $start_date ); ?></span>
 				<?php if ( ! empty( $end_date ) ) : ?><span class="end-date"><?php echo esc_html( $end_date ); ?></span><?php endif; ?>
 			</div>
 			<?php if ( ! empty( $external_url ) ) : ?><span class="external-url"><a href="<?php echo esc_url( $external_url ); ?>"><?php echo esc_url( $external_url ); ?></a></span><?php endif; ?>
-			<div class="timeline-content timeline-content-<?php echo $column_class; ?>">
+			<div class="t-content t-content-<?php echo $column_class; ?>">
 				<?php
 				// Retrieve the item's content and prep for discovery of the first paragraph.
 				$content = apply_filters( 'the_content', get_the_content() );
@@ -211,24 +211,24 @@ while( $timeline_query->have_posts() ) {
 					// Use a data attribute to avoid loading all images until the extra content is expanded.
 					$content = preg_replace('|<img([^>]*) src="([^"/]*/?[^".]*\.[^"]*)"([^>]*)>|', '<img$1 src="" data-src="$2"$3>', $content);
 					?>
-					<div class="timeline-content-expanded">
+					<div class="t-content-expanded">
 						<?php echo $content; ?>
 					</div>
 					<?php
 				}
 				?>
 			</div>
-			<div class="timeline-item-footer">
+			<div class="ti-footer">
 				<?php
 				if ( $item_has_featured_image ) {
-					echo '<figure class="timeline-featured-image"><img src="' . esc_url( spine_get_featured_image_src( 'spine-small_size' ) ) . '"></figure>';
+					echo '<figure class="t-featured-image"><img src="' . esc_url( spine_get_featured_image_src( 'spine-small_size' ) ) . '"></figure>';
 				} else {
-					echo '<div class="timeline-featured-empty"></div>';
+					echo '<div class="t-featured-empty"></div>';
 				}
 				?>
-				<div class="timeline-item-footer-meta">
-					<?php if ( $show_more ) : ?><span class="timeline-item-read-more">More</span><?php endif; ?>
-					<div class="timeline-item-social">
+				<div class="ti-footer-meta">
+					<?php if ( $show_more ) : ?><span class="ti-read-more">More</span><?php endif; ?>
+					<div class="ti-social">
 						<a href="https://www.facebook.com/sharer/sharer.php?u=" class="facebook tracked">Facebook</a>
 						<a href="https://twitter.com/intent/tweet?text=" target="_blank" class="twitter tracked">Twitter</a>
 					</div>

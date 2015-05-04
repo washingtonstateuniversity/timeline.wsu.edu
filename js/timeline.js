@@ -10,19 +10,21 @@ var wsuTimeline = wsuTimeline || {};
 	 *
 	 * @type {boolean}
 	 */
-	var scrub_is_fixed = false,
-		nav_is_fixed   = false,
-		nav_on_display = false,
-		$scrub         = $('.scrub'),
-		last_timeline_width = 0,
-		$home_nav = $('.wsu-home-navigation'),
-		scrub_top = $scrub.offset().top,
-		doc_height = $(document).height(),
-		doc_width = $(document).width(),
-		timeline_size = doc_height - scrub_top,
-		last_scroll_top = $(document).scrollTop(),
-		home_nav_height = $home_nav.height(),
-		decade_markers = {
+	var scrub_is_fixed       = false,
+		nav_is_fixed         = false,
+		nav_on_display       = false,
+		$scrub               = $('.scrub'),
+		$scrub_column        = $scrub.find('.column'),
+		$scrub_progress_bar  = $('.scrub-progress-bar'),
+		$scrub_shade_overlay = $('.scrub-shade-overlay'),
+		$home_nav            = $('.wsu-home-navigation'),
+		doc_height           = $(document).height(),
+		scrub_top            = $scrub.offset().top,
+		scrub_width          = $scrub_column.width(),
+		scrub_left           = $scrub_column.offset().left,
+		timeline_size        = doc_height - scrub_top,
+		home_nav_height      = $home_nav.height(),
+		decade_markers       = {
 			1890 : 0,
 			1900 : 0,
 			1910 : 0,
@@ -37,17 +39,17 @@ var wsuTimeline = wsuTimeline || {};
 			2000 : 0,
 			2010 : 0
 		},
-		current_scroll_top = 0,
-		current_decade_key = 0,
+		current_scroll_top   = 0,
+		current_decade_key   = 0,
 		current_decade_start = 0,
-		current_decade_end = 0,
-		current_decade_perc = 0;
+		current_decade_end   = 0,
+		current_decade_perc  = 0;
 
 	wsuTimeline.containerView = Backbone.View.extend({
 		el: '.timeline-container',
 
 		events: {
-			'click .timeline-item-internal-wrapper' : 'clickTimelineItem'
+			'click .ti-inside-wrap' : 'clickTimelineItem'
 		},
 
 		/**
@@ -64,30 +66,30 @@ var wsuTimeline = wsuTimeline || {};
 			var $target = $(evt.target);
 
 			// Avoid clicks on the content itself. Prevents confusion when copying text.
-			if ( $target.is('.timeline-content') || $target.parents('.timeline-content').length ) {
+			if ( $target.is('.t-content') || $target.parents('.t-content').length ) {
 				return;
 			}
 
 			// Avoid clicks on the social sharing icons.
-			if ( $target.is('.timeline-item-social') || $target.parents('.timeline-item-social').length ) {
+			if ( $target.is('.ti-social') || $target.parents('.ti-social').length ) {
 				return;
 			}
 
-			var $target_parent = $target.parents('.timeline-item-container');
+			var $target_parent = $target.parents('.ti-container');
 
 			if ( $target_parent.hasClass('open') ) {
 				$target_parent.removeClass('open');
-				$target_parent.find('.timeline-item-read-more').html('More');
+				$target_parent.find('.ti-read-more').html('More');
 			} else {
 				// Loop through each newly expanded image and assign it's data-src as src.
-				$target_parent.find('.timeline-content-expanded img').each(function(){
+				$target_parent.find('.t-content-expanded img').each(function(){
 					var $current = $(this);
 					if ( '' === $current.attr('src') ) {
 						$current.attr('src', $current.data('src'));
 					}
 				});
 				$target_parent.addClass('open');
-				$target_parent.find('.timeline-item-read-more').html('Close');
+				$target_parent.find('.ti-read-more').html('Close');
 			}
 		}
 
@@ -142,16 +144,16 @@ var wsuTimeline = wsuTimeline || {};
 				}
 			}
 
-			var decade_minor = ( doc_width * .95 ) / count_total;
+			var decade_minor = scrub_width / count_total;
 
 			var decade_full = decade_minor * count_key;
 
 			var decade_partial = decade_minor * current_decade_perc;
 
-			var scrub_scroll = Math.floor( ( doc_width * 0.025 ) + decade_full + decade_partial );
+			var scrub_scroll = Math.floor( scrub_left + decade_full + decade_partial );
 
-			$('.scrub-progress-bar').width(scrub_scroll);
-			$('.scrub-shade-overlay').css('left', scrub_scroll + 'px');
+			$scrub_progress_bar.width(scrub_scroll);
+			$scrub_shade_overlay.css('left', scrub_scroll + 'px');
 		},
 
 		setup_decades: function() {
@@ -170,9 +172,11 @@ var wsuTimeline = wsuTimeline || {};
 
 		initialize: function() {
 			this.setup_decades();
+			this.setup_decade_position();
+			this.setup_scrub_position();
 			$(document).scroll(this.scrollTimeline);
 			$(document).trigger('scroll');
-			$(document).on('resize',this.refreshDefaults);
+			$(window).on('resize',this.refreshDefaults);
 		},
 
 		// Setup the events used in the overall application view.
@@ -185,12 +189,21 @@ var wsuTimeline = wsuTimeline || {};
 		 * the current document after a resize event has fired.
 		 */
 		refreshDefaults: function() {
-			scrub_top = $scrub.offset().top;
-			doc_height = $(document).height();
-			timeline_size = doc_height - scrub_top;
-			last_scroll_top = $(document).scrollTop();
-			home_nav_height = $home_nav.height();
-			$(document).trigger('scroll');
+			$scrub.css('position','relative');
+			scrub_top          = $scrub.offset().top;
+			$scrub.css('position','fixed');
+			scrub_width        = $scrub_column.width();
+			scrub_left         = $scrub_column.offset().left;
+			doc_height         = $(document).height();
+			timeline_size      = doc_height - scrub_top;
+			current_scroll_top = $(document).scrollTop();
+			home_nav_height    = $home_nav.height();
+
+			if ( undefined !== wsuTimeline.app ) {
+				wsuTimeline.app.setup_decades();
+				wsuTimeline.app.setup_decade_position();
+				wsuTimeline.app.setup_scrub_position();
+			}
 		},
 
 		/**
@@ -266,12 +279,12 @@ var wsuTimeline = wsuTimeline || {};
 			 * If the navigation is fixed, displayed, and we know that we're starting to scroll
 			 * back down the page, hide the navigation from view.
 			 */
-			if ( nav_is_fixed && ! nav_on_display && ( last_scroll_top > scroll_top ) ) {
+			if ( nav_is_fixed && ! nav_on_display && ( current_scroll_top > scroll_top ) ) {
 				$home_nav.css('top',0);
 				$scrub.css('top', home_nav_height + 'px');
 
 				nav_on_display = true;
-			} else if ( scrub_is_fixed && nav_is_fixed && nav_on_display && ( last_scroll_top < scroll_top ) ) {
+			} else if ( scrub_is_fixed && nav_is_fixed && nav_on_display && ( current_scroll_top < scroll_top ) ) {
 				$home_nav.css('top','-' + home_nav_height + 'px');
 				$scrub.css('top',0);
 
@@ -279,7 +292,7 @@ var wsuTimeline = wsuTimeline || {};
 			}
 
 			// Collect the last scroll point so that we can compare it next time.
-			last_scroll_top = scroll_top;
+			current_scroll_top = scroll_top;
 
 			if ( undefined !== wsuTimeline.app ) {
 				wsuTimeline.app.setup_decade_position();

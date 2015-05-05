@@ -175,6 +175,7 @@ var wsuTimeline = wsuTimeline || {};
 			this.setup_decade_position();
 			this.setup_scrub_position();
 			$(document).scroll(this.scrollTimeline);
+			$(document).on('touchmove', this.scrollTimeline);
 			$(document).trigger('scroll');
 			$(window).on('resize',this.refreshDefaults);
 		},

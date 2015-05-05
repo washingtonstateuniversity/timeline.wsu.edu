@@ -88,6 +88,12 @@ var wsuTimeline = wsuTimeline || {};
 						$current.attr('src', $current.data('src'));
 					}
 				});
+				$target_parent.find('.ti-feature img').each(function(){
+					var $current = $(this);
+					if ( '' === $current.attr('src') ) {
+						$current.attr('src', $current.data('src'));
+					}
+				});
 				$target_parent.addClass('open');
 				$target_parent.find('.ti-read-more').html('Close');
 			}
@@ -343,9 +349,6 @@ var wsuTimeline = wsuTimeline || {};
 		window.wsuTimeline.container = new wsuTimeline.containerView();
 		$('.t-featured-image').find('img').each(function() {
 			$(this).attr('src', $(this).data('src'));
-		});
-		$('.ti-feature').find('img').each(function() {
-			$(this).attr('src', $(this).data('src') );
 		});
 	});
 

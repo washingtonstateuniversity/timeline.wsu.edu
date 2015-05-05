@@ -338,15 +338,29 @@ var wsuTimeline = wsuTimeline || {};
 
 	});
 
-	$(document).ready(function(){
+	$(document).ready(function() {
 		window.wsuTimeline.app = new wsuTimeline.appView();
 		window.wsuTimeline.container = new wsuTimeline.containerView();
 		$('.t-featured-image').find('img').each(function() {
+			$(this).attr('src', $(this).data('src'));
+		});
+		$('.ti-feature').find('img').each(function() {
 			$(this).attr('src', $(this).data('src') );
 		});
-		$('.ti-feature').find('img').each(function(){
-			$(this).attr('src', $(this).data('src') );
-		});
-		setTimeout(window.wsuTimeline.app.refreshDefaults, 10000);
+	});
+
+	$(window).load(function(){
+		if ( '' !== window.location.hash ) {
+			var $item_container = $(window.location.hash);
+			var $scroll_container = $item_container.find('.ti-inside-wrap');
+
+			if ( 1 === $scroll_container.length ) {
+				var scroll_point = $scroll_container.offset().top - 100;
+				$(document).scrollTop(scroll_point);
+				$scroll_container.trigger('click');
+				$item_container.addClass('ti-highlight');
+			}
+		}
+		window.wsuTimeline.app.refreshDefaults();
 	});
 })(window, Backbone, jQuery, _, wsuTimeline);

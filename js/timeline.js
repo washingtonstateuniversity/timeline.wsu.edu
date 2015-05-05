@@ -347,5 +347,6 @@ var wsuTimeline = wsuTimeline || {};
 		$('.ti-feature').find('img').each(function(){
 			$(this).attr('src', $(this).data('src') );
 		});
+		setTimeout(window.wsuTimeline.app.refreshDefaults, 10000);
 	});
 })(window, Backbone, jQuery, _, wsuTimeline);

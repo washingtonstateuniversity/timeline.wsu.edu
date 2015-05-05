@@ -171,10 +171,16 @@ var wsuTimeline = wsuTimeline || {};
 		},
 
 		initialize: function() {
+			if ( 'none' === $home_nav.css('display') ) {
+				$home_nav = $('.spine-header');
+				this.refreshDefaults();
+			}
+
 			this.setup_decades();
 			this.setup_decade_position();
 			this.setup_scrub_position();
 			$(document).scroll(this.scrollTimeline);
+			$(document).on('touchmove', this.scrollTimeline);
 			$(document).trigger('scroll');
 			$(window).on('resize',this.refreshDefaults);
 		},
@@ -335,5 +341,11 @@ var wsuTimeline = wsuTimeline || {};
 	$(document).ready(function(){
 		window.wsuTimeline.app = new wsuTimeline.appView();
 		window.wsuTimeline.container = new wsuTimeline.containerView();
+		$('.t-featured-image').find('img').each(function() {
+			$(this).attr('src', $(this).data('src') );
+		});
+		$('.ti-feature').find('img').each(function(){
+			$(this).attr('src', $(this).data('src') );
+		});
 	});
 })(window, Backbone, jQuery, _, wsuTimeline);

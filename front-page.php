@@ -168,7 +168,7 @@ while( $timeline_query->have_posts() ) {
 		<?php if ( $item_has_featured_image ) : ?>
 		<div class="ti-feature-wrap">
 			<figure class="ti-feature">
-				<img src="<?php echo esc_url( spine_get_featured_image_src( 'spine-xlarge_size' ) ); ?>">
+				<img src="" data-src="<?php echo esc_url( spine_get_featured_image_src( 'spine-xlarge_size' ) ); ?>">
 			</figure>
 		</div>
 		<?php endif; ?>
@@ -221,7 +221,7 @@ while( $timeline_query->have_posts() ) {
 			<div class="ti-footer">
 				<?php
 				if ( $item_has_featured_image ) {
-					echo '<figure class="t-featured-image"><img src="' . esc_url( spine_get_featured_image_src( 'spine-small_size' ) ) . '"></figure>';
+					echo '<figure class="t-featured-image"><img src="" data-src="' . esc_url( spine_get_featured_image_src( 'spine-small_size' ) ) . '"></figure>';
 				} else {
 					echo '<div class="t-featured-empty"></div>';
 				}
@@ -229,8 +229,18 @@ while( $timeline_query->have_posts() ) {
 				<div class="ti-footer-meta">
 					<?php if ( $show_more ) : ?><span class="ti-read-more">More</span><?php endif; ?>
 					<div class="ti-social">
-						<a href="https://www.facebook.com/sharer/sharer.php?u=" class="facebook tracked">Facebook</a>
-						<a href="https://twitter.com/intent/tweet?text=" target="_blank" class="twitter tracked">Twitter</a>
+						<?php
+
+						$share_url = home_url( '/' ) . '#' . $item_id;
+
+						$twitter_url = add_query_arg( 'text', esc_attr( get_the_title() ), 'https://twitter.com/intent/tweet' );
+						$twitter_url = add_query_arg( 'url', $share_url, $twitter_url );
+						$twitter_url = add_query_arg( 'via', 'wsupullman', $twitter_url );
+
+						$facebook_url = add_query_arg( 'u', $share_url, 'https://www.facebook.com/sharer/sharer.php' );
+						?>
+						<a href="<?php echo esc_url( $facebook_url ); ?>" target="_blank" class="facebook tracked">Facebook</a>
+						<a href="<?php echo esc_url( $twitter_url ); ?>" target="_blank" class="twitter tracked">Twitter</a>
 					</div>
 				</div>
 			</div>

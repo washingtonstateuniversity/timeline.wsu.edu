@@ -233,14 +233,14 @@ while( $timeline_query->have_posts() ) {
 
 						$share_url = home_url( '/' ) . '#' . $item_id;
 
-						$twitter_url = add_query_arg( 'text', esc_attr( get_the_title() ), 'https://twitter.com/intent/tweet' );
-						$twitter_url = add_query_arg( 'url', $share_url, $twitter_url );
+						$twitter_url = add_query_arg( 'text', urlencode( html_entity_decode( get_the_title() ) ), 'https://twitter.com/intent/tweet' );
+						$twitter_url = add_query_arg( 'url', urlencode( $share_url ), $twitter_url );
 						$twitter_url = add_query_arg( 'via', 'wsupullman', $twitter_url );
 
-						$facebook_url = add_query_arg( 'u', $share_url, 'https://www.facebook.com/sharer/sharer.php' );
+						$facebook_url = add_query_arg( 'u', urlencode( $share_url ), 'https://www.facebook.com/sharer/sharer.php' );
 						?>
-						<a href="<?php echo esc_url( $facebook_url ); ?>" target="_blank" class="facebook tracked">Facebook</a>
-						<a href="<?php echo esc_url( $twitter_url ); ?>" target="_blank" class="twitter tracked">Twitter</a>
+						<a href="<?php echo $facebook_url; ?>" target="_blank" class="facebook tracked">Facebook</a>
+						<a href="<?php echo $twitter_url; ?>" target="_blank" class="twitter tracked">Twitter</a>
 					</div>
 				</div>
 			</div>

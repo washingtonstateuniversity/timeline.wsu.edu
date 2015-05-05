@@ -341,5 +341,8 @@ var wsuTimeline = wsuTimeline || {};
 	$(document).ready(function(){
 		window.wsuTimeline.app = new wsuTimeline.appView();
 		window.wsuTimeline.container = new wsuTimeline.containerView();
+		$('.ti-feature').find('img').each(function(){
+			$(this).attr('src', $(this).data('src') );
+		});
 	});
 })(window, Backbone, jQuery, _, wsuTimeline);

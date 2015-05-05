@@ -168,7 +168,7 @@ while( $timeline_query->have_posts() ) {
 		<?php if ( $item_has_featured_image ) : ?>
 		<div class="ti-feature-wrap">
 			<figure class="ti-feature">
-				<img src="<?php echo esc_url( spine_get_featured_image_src( 'spine-xlarge_size' ) ); ?>">
+				<img src="" data-src="<?php echo esc_url( spine_get_featured_image_src( 'spine-xlarge_size' ) ); ?>">
 			</figure>
 		</div>
 		<?php endif; ?>

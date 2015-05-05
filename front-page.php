@@ -221,7 +221,7 @@ while( $timeline_query->have_posts() ) {
 			<div class="ti-footer">
 				<?php
 				if ( $item_has_featured_image ) {
-					echo '<figure class="t-featured-image"><img src="' . esc_url( spine_get_featured_image_src( 'spine-small_size' ) ) . '"></figure>';
+					echo '<figure class="t-featured-image"><img src="" data-src="' . esc_url( spine_get_featured_image_src( 'spine-small_size' ) ) . '"></figure>';
 				} else {
 					echo '<div class="t-featured-empty"></div>';
 				}

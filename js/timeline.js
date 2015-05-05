@@ -341,6 +341,9 @@ var wsuTimeline = wsuTimeline || {};
 	$(document).ready(function(){
 		window.wsuTimeline.app = new wsuTimeline.appView();
 		window.wsuTimeline.container = new wsuTimeline.containerView();
+		$('.t-featured-image').find('img').each(function() {
+			$(this).attr('src', $(this).data('src') );
+		});
 		$('.ti-feature').find('img').each(function(){
 			$(this).attr('src', $(this).data('src') );
 		});

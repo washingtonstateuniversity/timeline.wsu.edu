@@ -171,6 +171,11 @@ var wsuTimeline = wsuTimeline || {};
 		},
 
 		initialize: function() {
+			if ( 'none' === $home_nav.css('display') ) {
+				$home_nav = $('.spine-header');
+				this.refreshDefaults();
+			}
+
 			this.setup_decades();
 			this.setup_decade_position();
 			this.setup_scrub_position();

@@ -352,6 +352,9 @@ var wsuTimeline = wsuTimeline || {};
 		window.wsuTimeline.app = new wsuTimeline.appView();
 		window.wsuTimeline.container = new wsuTimeline.containerView();
 		$("img.lazy").lazyload();
+		$('img.lazy').load(function() {
+			window.wsuTimeline.app.refreshDefaults();
+		})
 	});
 
 	$(window).load(function(){

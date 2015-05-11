@@ -205,9 +205,15 @@ var wsuTimeline = wsuTimeline || {};
 		 * the current document after a resize event has fired.
 		 */
 		refreshDefaults: function() {
+			/**
+			 * Temporarily position the scrub bar as relative so that we can accurately
+			 * calculate the top offset. We then remove the position property so that
+			 * the assigned class can probably handle the behavior.
+			 */
 			$scrub.css('position','relative');
-			scrub_top          = $scrub.offset().top;
-			$scrub.css('position','fixed');
+			scrub_top = $scrub.offset().top;
+			$scrub.css('position','');
+
 			scrub_width        = $scrub_column.width();
 			scrub_left         = $scrub_column.offset().left;
 			doc_height         = $(document).height();

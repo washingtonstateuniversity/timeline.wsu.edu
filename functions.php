@@ -7,7 +7,7 @@ class WSU_Timeline_Theme {
 	/**
 	 * @var string Theme version for cache breaking.
 	 */
-	public static $version = '0.9.4';
+	public static $version = '0.9.5';
 
 	/**
 	 * Setup hooks for the theme.

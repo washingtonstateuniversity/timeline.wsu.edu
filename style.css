@@ -74,7 +74,7 @@ header.main-header.wsu-home-navigation {
 }
 
 .scrub-progress-bar {
-	width: 100%;
+	width: 20px;
 	height: 5px;
 	background-color: #981e32;
 }
@@ -107,7 +107,7 @@ header.main-header.wsu-home-navigation {
 	width: 20px;
 	position: absolute;
 	top: 0;
-	left: 0;
+	left: 20px;
 	background: rgba(0,0,0,.3);
 	height: 100%;
 }

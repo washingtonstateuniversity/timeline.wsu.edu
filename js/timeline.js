@@ -133,6 +133,14 @@ var wsuTimeline = wsuTimeline || {};
 			var current_decade_total = current_decade_end - current_decade_start;
 			var current_decade_marker = current_scroll_top - current_decade_start;
 
+			if ( 0 === current_decade_total && 0 === current_decade_key ) {
+				current_decade_key = '1890';
+				current_decade_start = decade_markers['1890'];
+				current_decade_end = decade_markers['1900'];
+				current_decade_total = current_decade_end - current_decade_start;
+				current_decade_marker = 1;
+			}
+
 			current_decade_perc = ( current_decade_marker / current_decade_total );
 		},
 

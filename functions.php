@@ -33,7 +33,14 @@ class WSU_Timeline_Theme {
 	public function enqueue_scripts() {
 		wp_enqueue_script( 'wsu-home-typekit', 'https://use.typekit.net/roi0hte.js', array(), false, false );
 		wp_enqueue_script( 'wsu-features', 'https://wsu.edu/wp-content/themes/wsu-home/js/wsu-feature.min.js', array( 'backbone' ), spine_get_script_version(), true );
-		wp_enqueue_script( 'wsu-timeline', get_stylesheet_directory_uri() . '/js/timeline.js', array( 'jquery' ), spine_get_script_version(), true );
+
+		if ( defined( 'WSU_LOCAL_CONFIG' ) && WSU_LOCAL_CONFIG ) {
+			$script = 'timeline.js';
+		} else {
+			$script = 'timeline.min.js';
+		}
+
+		wp_enqueue_script( 'wsu-timeline', get_stylesheet_directory_uri() . '/js/' . $script, array( 'jquery' ), spine_get_script_version(), true );
 	}
 
 	/**

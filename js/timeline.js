@@ -208,7 +208,7 @@ var wsuTimeline = wsuTimeline || {};
 			/**
 			 * Temporarily position the scrub bar as relative so that we can accurately
 			 * calculate the top offset. We then remove the position property so that
-			 * the assigned class can probably handle the behavior.
+			 * the assigned class can handle the behavior.
 			 */
 			$scrub.css('position','relative');
 			scrub_top = $scrub.offset().top;

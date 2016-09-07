@@ -65,7 +65,7 @@ if ( is_front_page() ) :
 		'depth'           => 1,
 	);
 
-	$timeline_site = wsuwp_get_current_site();
+	$timeline_site = get_site();
 
 	if ( 'timeline.wsu.dev' === $timeline_site->domain ) {
 		$home_domain = 'wp.wsu.dev';

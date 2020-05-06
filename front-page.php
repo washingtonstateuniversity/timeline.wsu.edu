@@ -165,12 +165,12 @@ while( $timeline_query->have_posts() ) {
 	$item_id = 'ti-' . get_the_ID();
 	?>
 	<div id="<?php echo $item_id; ?>" class="<?php echo implode( ' ', $column_classes ); ?>">
-		<?php // if ( $item_has_featured_image ) : ?>
-		<!-- <div class="ti-feature-wrap">
+		<?php  if ( $item_has_featured_image ) : ?>
+		<div class="ti-feature-wrap">
 			<figure class="ti-feature">
 				<img src="" data-src="<?php // echo esc_url( spine_get_featured_image_src( 'spine-xlarge_size' ) ); ?>">
 			</figure>
-		</div> -->
+		</div> 
 		<?php endif; ?>
 		<div class="ti-inside-wrap">
 			<header>
